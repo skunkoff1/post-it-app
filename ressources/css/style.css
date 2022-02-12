@@ -1,0 +1,69 @@
+body,
+html {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    background-color: black;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header {
+    height: 10vh;
+    width: 40vw;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+}
+
+h1 {
+    font-size: 40px;
+    color: white;
+}
+
+
+/*==================== BOARD ========================*/
+
+
+/**********************************************************************************/
+
+
+/****************** FAIRE UN FRIGO CE SERA VACHEMENT PLUS STYLE *******************/
+
+
+/**********************************************************************************/
+
+.board {
+    height: 80vh;
+    width: 80vw;
+    background: -moz-linear-gradient(45deg, rgb(40, 56, 11) 0%, rgba(40, 50, 11, 1) 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(45deg, rgba(40, 56, 11, 1) 0%, rgba(40, 50, 11, 1) 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(45deg, rgba(40, 56, 11, 1) 0%, rgb(40, 50, 9) 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#38230b', endColorstr='#0033301b', GradientType=1);
+}
+
+.post-it {
+    position: absolute;
+    background-color: rgb(226, 226, 101);
+}
+
+
+/*==================== FOOTER ========================*/
+
+footer {
+    display: flex;
+    justify-content: flex-end;
+    color: white;
+    width: 100vw;
+}
+
+footer p {
+    margin-right: 50px;
+}
