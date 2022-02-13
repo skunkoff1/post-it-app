@@ -14,9 +14,10 @@ html {
 
 header {
     height: 10vh;
-    width: 40vw;
+    width: 80vw;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    align-items: center;
     color: white;
 }
 
@@ -25,22 +26,49 @@ h1 {
     color: white;
 }
 
-.check {
+.buttonDiv {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     right: 0px;
+    border: 2px solid white;
+    margin-top:10px;
+    padding: 5px 10px;
+    border-radius: 15px;
 }
 
-button {
+header p {
+    font-size: 20px;
+}
+
+#modeButtonDrag, #modeButtonResize {
     border: none;
     height: 60px;
-    width: 150px;
+    width: 180px;
     border-radius: 15px;
-    background-color: green;
+    background-color: rgb(18, 187, 18);
+    color: white;
+    text-transform: capitalize;
+    font-size: 20px;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-button:hover {
+#modeButtonDrag:hover, #modeButtonResize:hover, #addPostIt:hover {
     cursor: pointer;
+    transform: scale(1.1);
+}
+
+#addPostIt {
+    margin-top:10px;
+    height: 60px;
+    width: 180px;
+    border:none;
+    border-radius: 15px;
+    text-transform: capitalize;
+    font-size: 20px;
 }
 
 
@@ -64,31 +92,17 @@ button:hover {
     /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(45deg, rgba(40, 56, 11, 1) 0%, rgb(40, 50, 9) 100%);
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#38230b', endColorstr='#0033301b', GradientType=1);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#38230b', endColorstr='#0033301b', GradientType=1);
 }
 
 .post-it {
     position: absolute;
     background-color: rgb(226, 226, 101);
     border: 1px solid black;
-    filter: drop-shadow(0 0 10px black)
+    filter: drop-shadow(0 0 10px black);
+    resize: none;
+    font-size: 20px;
 }
-
-.resize {
-    position: relative;
-    width: 0;
-    height: 0;
-    border-top: 10px solid transparent;
-    border-left: 10px solid transparent;
-    border-right: 10px solid gray;
-    border-bottom: 10px solid gray;
-}
-
-.resize:hover {
-    cursor: nw-resize;
-    padding: 10px;
-}
-
 
 /*==================== FOOTER ========================*/
 

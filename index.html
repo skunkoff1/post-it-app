@@ -18,10 +18,12 @@
             <p>Horizontal(x) : <span class="horizontal"></span></p>
             <p>Vertical(y) : <span class="vertical"></span></p>
         </div>
-        <div class="check">
-            <button type="checkbox" id="dragButton" onclick="canDrag()">Deplacer les postit</button>
-            <button type="checkbox" id="writeButton" onclick="canWrite()">Ecrire</button>
+        <div class="buttonDiv">     
+            <p>Changer de mode :</p>       
+            <button type="button" id="modeButtonDrag" onclick="mode('drag')">Déplacer</button>
+            <button type="button" id="modeButtonResize" onclick="mode('resize')">redimensionner</button>
         </div>
+        <button type="button" id="addPostIt" onclick="addPostIt()">ajouter un Post-It</button>
     </header>
     <main class="board">
 
