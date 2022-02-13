@@ -48,13 +48,7 @@ class Postit {
     }
 
     createPostIt() {
-        // On cherche le z-index max
-        postItArray.forEach((item) => {
-            if (item[1] >= max) {
-                max = item[1] + 1;
-                console.log(item[1])
-            }
-        })
+        searchMax();        
         let board = document.querySelector('.board');
         this.post.className = "post-it";
         this.text.style.width = this.width + "px";
@@ -108,12 +102,7 @@ class Postit {
     // fonction déplacer ou redimensionner post-it
     // lorsque le click est relaché
     stopDrag(e) {
-        // on recherche le max et on le redéfinit
-        postItArray.forEach((item) => {
-            if (item[1] >= max) {
-                max = item[1] + 1;
-            }
-        })
+        searchMax();
         // Si le mode déplacer est enclenché
         if (dragMode === true) {
             // On passe la div en mode déplacement impossible
@@ -155,13 +144,7 @@ class Postit {
     // Fonction effacer un postit
     erasePostIt() {
         if (eraseMode === true) {
-            // On cherche le z-index max et on le redéfinit
-            postItArray.forEach((item) => {
-                if (item[1] >= max) {
-                    max = item[1] + 1;
-                    console.log(item[1])
-                }
-            })
+            searchMax();
 
             // On cherche le post it et on redéfinit son z-index
             postItArray.forEach((item) => {
@@ -268,6 +251,14 @@ function addPostIt() {
     let post = new Postit(500, 400, 150, 150);
 }
 
+function searchMax() {
+    postItArray.forEach((item) => {
+        if (item[1] >= max) {
+            max = item[1] + 1;
+            console.log(item[1])
+        }
+    })
+}
 
 /**********************************************************************************/
 /****************** FAIRE UN FRIGO CE SERA VACHEMENT PLUS STYLE *******************/
