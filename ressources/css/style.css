@@ -31,7 +31,7 @@ h1 {
     align-items: center;
     right: 0px;
     border: 2px solid white;
-    margin-top:10px;
+    margin-top: 10px;
     padding: 5px 10px;
     border-radius: 15px;
 }
@@ -40,7 +40,7 @@ header p {
     font-size: 20px;
 }
 
-#modeButtonDrag, #modeButtonResize {
+#modeButtonDrag, #modeButtonResize, #modeButtonErase {
     border: none;
     height: 60px;
     width: 180px;
@@ -56,16 +56,16 @@ header p {
     align-items: center;
 }
 
-#modeButtonDrag:hover, #modeButtonResize:hover, #addPostIt:hover {
+#modeButtonDrag:hover, #modeButtonResize:hover, #addPostIt:hover, #modeButtonErase:hover , .erase:hover{
     cursor: pointer;
     transform: scale(1.1);
 }
 
 #addPostIt {
-    margin-top:10px;
+    margin-top: 10px;
     height: 60px;
     width: 180px;
-    border:none;
+    border: none;
     border-radius: 15px;
     text-transform: capitalize;
     font-size: 20px;
@@ -98,10 +98,50 @@ header p {
 .post-it {
     position: absolute;
     background-color: rgb(226, 226, 101);
-    border: 1px solid black;
+    border: 4px solid black;
     filter: drop-shadow(0 0 10px black);
-    resize: none;
     font-size: 20px;
+    width:fit-content;
+    height:fit-content;    
+}
+
+.text {
+    position: relative;
+    background-color: rgb(226, 226, 101);
+    outline: none;
+    border: none;
+    resize: none;
+    margin:0;
+    padding:0;
+}
+
+.erase {
+    position: relative;
+    width: 30px;
+    height: 30px;
+}
+
+.cross {
+    position:relative;
+    width: 30px;
+    height: 10px;
+    background-color:red;
+    top:10px;
+    transform: rotate(45deg);
+}
+
+.cross::after {
+    background: red;
+    content: '';
+    height: 10px;
+    position: absolute;
+    transform: rotate(90deg);    
+    width: 30px;
+  }
+
+textarea:focus {
+    outline: none;
+    border: 3px solid red;
 }
 
 /*==================== FOOTER ========================*/
