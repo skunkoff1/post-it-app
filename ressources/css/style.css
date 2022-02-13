@@ -52,6 +52,23 @@ h1 {
 .post-it {
     position: absolute;
     background-color: rgb(226, 226, 101);
+    border:1px solid black;
+    filter:drop-shadow(0 0 10px black)
+}
+
+.resize {
+    position:relative;
+    width:0;
+    height:0;
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid gray;
+    border-bottom: 10px solid gray;
+}
+
+.resize:hover {
+    cursor:nw-resize;
+    padding:10px;
 }
 
 
