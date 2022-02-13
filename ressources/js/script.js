@@ -138,6 +138,18 @@ class Postit {
         if (this.isDraging === true && dragMode === true) {
             this.post.style.left = parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart + "px";
             this.post.style.top = parseInt(e.clientY) + parseInt(this.posY) - this.yOnStart + "px";
+            if( (parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart) <=(window.innerWidth/10)) {
+                this.post.style.left = window.innerWidth/10 + "px";
+            }
+            if( (parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart) >=window.innerWidth -window.innerWidth/10 - parseInt(this.text.style.width)) {
+                this.post.style.left = (window.innerWidth -window.innerWidth/10-parseInt(this.text.style.width)+"px");
+            }
+            if( (parseInt(e.clientY) + parseInt(this.posY) - this.yOnStart) <=window.innerHeight/10) {
+                this.post.style.top = window.innerHeight/10+"px";
+            }
+            if( (parseInt(e.clientY) + parseInt(this.posY) - this.yOnStart) >=window.innerHeight -(window.innerHeight/10)- parseInt(this.text.style.height)) {
+                this.post.style.top = (window.innerHeight -(window.innerHeight/10)-parseInt(this.text.style.height)+"px");
+             }
         }
     }
 
@@ -248,7 +260,7 @@ function mode(mode) {
 
 // Fonction créer un post it
 function addPostIt() {
-    let post = new Postit(500, 400, 150, 150);
+    new Postit(500, 400, 150, 150);
 }
 
 function searchMax() {
