@@ -25,6 +25,24 @@ h1 {
     color: white;
 }
 
+.check {
+    display: flex;
+    flex-direction: column;
+    right: 0px;
+}
+
+button {
+    border: none;
+    height: 60px;
+    width: 150px;
+    border-radius: 15px;
+    background-color: green;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
 
 /*==================== BOARD ========================*/
 
@@ -52,14 +70,14 @@ h1 {
 .post-it {
     position: absolute;
     background-color: rgb(226, 226, 101);
-    border:1px solid black;
-    filter:drop-shadow(0 0 10px black)
+    border: 1px solid black;
+    filter: drop-shadow(0 0 10px black)
 }
 
 .resize {
-    position:relative;
-    width:0;
-    height:0;
+    position: relative;
+    width: 0;
+    height: 0;
     border-top: 10px solid transparent;
     border-left: 10px solid transparent;
     border-right: 10px solid gray;
@@ -67,8 +85,8 @@ h1 {
 }
 
 .resize:hover {
-    cursor:nw-resize;
-    padding:10px;
+    cursor: nw-resize;
+    padding: 10px;
 }
 
 
