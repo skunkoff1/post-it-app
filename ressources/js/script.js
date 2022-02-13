@@ -2,7 +2,7 @@ let postItArray = []; // Tableau de tous les post-it
 let dragMode = true; // Flag bouton deplaver post-it
 let resizeMode = false; // Flag bouton redimensionner post-it
 let eraseMode = false; // Flag bouton redimensionner post-it
-let count = 0;
+let max = 0;
 
 // Récupération des boutons
 let buttonDrag = document.getElementById('modeButtonDrag');
@@ -49,14 +49,19 @@ class Postit {
     }
 
     createPostIt() {
+        postItArray.forEach((item) => {
+            if(item[1] >=max) {
+                max = item[1]+1;
+                console.log(item[1])
+            }
+        })
         let board = document.querySelector('.board');
         this.post.className = "post-it";
-        this.post.id = "post" + postItArray.length;
         this.text.style.width = this.width + "px";
         this.text.style.height = this.height + "px";
         this.post.style.left = this.posX + "px";
         this.post.style.top = this.posY + "px";
-        this.zIndex = postItArray.length+count;
+        this.zIndex = max;
         this.post.style.zIndex = this.zIndex;
         this.erase.className = "erase";
         this.erase.style.width = "30px";
@@ -94,25 +99,29 @@ class Postit {
     stopDrag(e) {
         // e.preventDefault();
         // e.stopImmediatePropagation();
-        if (dragMode === true) {
-            count++;
+        postItArray.forEach((item) => {
+            if(item[1] >=max) {
+                max = item[1]+1;
+                console.log(item[1])
+            }
+        })
+        if (dragMode === true) {            
             this.isDraging = false;
-            this.post.style.zIndex = postItArray.length+count;
+            this.post.style.zIndex = max;
             this.posX = this.post.style.left;
             this.posY = this.post.style.top;
             postItArray.forEach((item) => {
                 item[0].style.opacity = "1";
                 if(item[0] == this.post) {
-                    item[1] =  postItArray.length+count;
+                    item[1] =  max;
                 }
             })
         }
-        if (resizeMode === true) {
-            count++;
-            this.post.style.zIndex = postItArray.length+count;
+        if (resizeMode === true) {            
+            this.post.style.zIndex = max;
             postItArray.forEach((item) => {
                 if(item[0] == this.post) {
-                    item[1] =  postItArray.length+count;
+                    item[1] =  max;
                 }
             })
         }
@@ -128,8 +137,14 @@ class Postit {
     erasePostIt() {
         if(eraseMode === true) {
             postItArray.forEach((item) => {
+                if(item[1] >=max) {
+                    max = item[1]+1;
+                    console.log(item[1])
+                }
+            })
+            postItArray.forEach((item) => {
                 if(item[0] == this.post) {
-                    item[1] =  postItArray.length+count;
+                    item[1] =  max;
                 }
             })
             this.sortArray();
