@@ -1,5 +1,5 @@
 let postItArray = []; // Tableau de tous les post-it
-let dragMode = true; // Flag bouton deplaver post-it
+let dragMode = true; // Flag bouton deplacer post-it
 let resizeMode = false; // Flag bouton redimensionner post-it
 let eraseMode = false; // Flag bouton redimensionner post-it
 let max = 0;
@@ -10,7 +10,6 @@ let buttonResize = document.getElementById('modeButtonResize');
 let buttonErase = document.getElementById('modeButtonErase');
 
 // Style par défaut des boutons -> mode par défaut == deplacer
-
 buttonResize.style.height = "40px";
 buttonResize.style.width = "150px";
 buttonResize.style.backgroundColor = "rgb(226, 48, 48)";
@@ -49,9 +48,10 @@ class Postit {
     }
 
     createPostIt() {
+        // On cherche le z-index max
         postItArray.forEach((item) => {
-            if(item[1] >=max) {
-                max = item[1]+1;
+            if (item[1] >= max) {
+                max = item[1] + 1;
                 console.log(item[1])
             }
         })
@@ -72,99 +72,127 @@ class Postit {
         this.post.appendChild(this.erase);
         this.erase.appendChild(this.cross);
         board.appendChild(this.post);
+        // Afin de pouvoir mettre à jour les z-index et trié les post-it
+        // J'enregistre la div et le z-index
         postItArray.push([this.post, this.zIndex]);
+        // Ecouteurs d'évènements
         this.post.addEventListener('mousedown', this.startDrag.bind(this));
         this.post.addEventListener('mouseup', this.stopDrag.bind(this));
         this.post.addEventListener('mousemove', this.drag.bind(this));
         this.erase.addEventListener('click', this.erasePostIt.bind(this));
     }
 
-    startDrag(e) {
-        // e.preventDefault();
-        // e.stopImmediatePropagation();
+    // Fonction déplacer ou redimensionner post-it
+    // lorsque le click est enfoncé
+    startDrag(e) {       
+        // Si le mode déplacer est enclenché
         if (dragMode === true) {
+            // On passe la div en mode déplacement possible
             this.isDraging = true;
-            this.post.style.zIndex = "1000";
+            // la div selectionné voit son z-index passé au max
+            this.post.style.zIndex = max + 1;
+            // On enregistre la position de départ de la souris afin de calculer le déplacement
             this.xOnStart = e.clientX + window.pageXOffset;
             this.yOnStart = e.clientY + window.pageYOffset;
+            // on passe tous les pos-it en transparent
             postItArray.forEach((item) => {
-                item[0].style.opacity = "0.5";                
+                item[0].style.opacity = "0.6";
             })
         }
-        if (resizeMode === true) {
-            this.post.style.zIndex = "1000";  
+        // Si le mode redimensionner est enclenché
+        if (resizeMode === true || eraseMode === true) {
+            // la div selectionné voit son z-index passé au max
+            this.post.style.zIndex = max + 1;
         }
-
     }
+    // fonction déplacer ou redimensionner post-it
+    // lorsque le click est relaché
     stopDrag(e) {
-        // e.preventDefault();
-        // e.stopImmediatePropagation();
+        // on recherche le max et on le redéfinit
         postItArray.forEach((item) => {
-            if(item[1] >=max) {
-                max = item[1]+1;
-                console.log(item[1])
+            if (item[1] >= max) {
+                max = item[1] + 1;
             }
         })
-        if (dragMode === true) {            
+        // Si le mode déplacer est enclenché
+        if (dragMode === true) {
+            // On passe la div en mode déplacement impossible
             this.isDraging = false;
+            // la div selectionné voit son z-index passé au max
             this.post.style.zIndex = max;
+            // on met à jour sa position
             this.posX = this.post.style.left;
             this.posY = this.post.style.top;
+            // on met à jour le z-index dans le tableau de post it
             postItArray.forEach((item) => {
                 item[0].style.opacity = "1";
-                if(item[0] == this.post) {
-                    item[1] =  max;
+                if (item[0] == this.post) {
+                    item[1] = max;
                 }
             })
         }
-        if (resizeMode === true) {            
-            this.post.style.zIndex = max;
+        // si le mode redimensionner est enclecnché
+        if (resizeMode === true) {
+            // la div selectionné voit son z-index passé au max
+            this.post.style.zIndex = max;            
+            // on met à jour le z-index dans le tableau de post it
             postItArray.forEach((item) => {
-                if(item[0] == this.post) {
-                    item[1] =  max;
+                if (item[0] == this.post) {
+                    item[1] = max;
                 }
             })
         }
     }
+    // Fonction déplacer post-it
+    // lors du déplacement de la souris
     drag(e) {
-        // e.preventDefault();
-        // e.stopImmediatePropagation();
         if (this.isDraging === true && dragMode === true) {
             this.post.style.left = parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart + "px";
             this.post.style.top = parseInt(e.clientY) + parseInt(this.posY) - this.yOnStart + "px";
         }
-    }  
+    }
+
+    // Fonction effacer un postit
     erasePostIt() {
-        if(eraseMode === true) {
+        if (eraseMode === true) {
+            // On cherche le z-index max et on le redéfinit
             postItArray.forEach((item) => {
-                if(item[1] >=max) {
-                    max = item[1]+1;
+                if (item[1] >= max) {
+                    max = item[1] + 1;
                     console.log(item[1])
                 }
             })
-            postItArray.forEach((item) => {
-                if(item[0] == this.post) {
-                    item[1] =  max;
-                }
-            })
-            this.sortArray();
-            postItArray.pop();
-            this.post.remove();            
-        }
-    }  
 
-    sortArray() {        
-            postItArray.sort(function (a, b) {
-                if (a[1] === b[1]) {
-                    return 0;
-                }
-                else {
-                    return (a[1] < b[1]) ? -1 : 1;
+            // On cherche le post it et on redéfinit son z-index
+            postItArray.forEach((item) => {
+                if (item[0] == this.post) {
+                    item[1] = max + 1;
                 }
             })
+            // Tri du tableau de post-it en fonction de leur z-index croissant
+            this.sortArray();
+            //  et on efface le dernier élément du tableau        
+            postItArray.pop();
+            // on efface la div du DOM
+            this.post.remove();
+        }
+    }
+
+    // Foncction triant le tableau de post-it par leur z-index croissant
+    sortArray() {
+        postItArray.sort(function (a, b) {
+            if (a[1] === b[1]) {
+                return 0;
+            }
+            else {
+                return (a[1] < b[1]) ? -1 : 1;
+            }
+        })
     }
 }
 
+
+// Trackeur de la position de la souris sur l'écran
 document.onmousemove = function (e) {
     let x = document.querySelector('.horizontal');
     let y = document.querySelector('.vertical');
@@ -173,7 +201,9 @@ document.onmousemove = function (e) {
 
 };
 
-function mode(mode) {    
+
+// Fonction gérant les modes et l'affichage des boutrons de mode
+function mode(mode) {
     if (mode === 'drag') {
         dragMode = true;
         resizeMode = false;
@@ -208,7 +238,7 @@ function mode(mode) {
         buttonErase.style.backgroundColor = "rgb(226, 48, 48)";
         postItArray.forEach((item) => {
             item[0].childNodes[0].style.resize = "both";
-            item[0].style.opacity = "0.5";
+            item[0].style.opacity = "0.6";
             item[0].childNodes[1].style.display = "none";
         })
     }
@@ -227,14 +257,15 @@ function mode(mode) {
         buttonDrag.style.backgroundColor = "rgb(226, 48, 48)";
         postItArray.forEach((item) => {
             item[0].childNodes[0].style.resize = "none";
-            item[0].style.opacity = "0.5";
+            item[0].style.opacity = "0.6";
             item[0].childNodes[1].style.display = "block";
         })
     }
 }
 
+// Fonction créer un post it
 function addPostIt() {
-    let post = new Postit(500,400,150,150);
+    let post = new Postit(500, 400, 150, 150);
 }
 
 
