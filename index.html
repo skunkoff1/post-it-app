@@ -13,20 +13,42 @@
         <div>
             <h1>Post it !</h1>
         </div>
-
-        <div class="test">
-            <p>Horizontal(x) : <span class="horizontal"></span></p>
-            <p>Vertical(y) : <span class="vertical"></span></p>
-        </div>
-        <div class="buttonDiv">     
-            <p>Changer de mode :</p>       
+        <div class="buttonDiv">
+            <p>Changer de mode :</p>
             <button type="button" id="modeButtonDrag" onclick="mode('drag')">Déplacer</button>
             <button type="button" id="modeButtonResize" onclick="mode('resize')">redimensionner</button>
             <button type="button" id="modeButtonErase" onclick="mode('erase')">supprimer</button>
+            <button type="button" id="modeButtonEdit" onclick="mode('edit')">éditer</button>
         </div>
         <button type="button" id="addPostIt" onclick="addPostIt()">ajouter un Post-It</button>
     </header>
     <main class="board">
+        <aside id="asideBar">
+            <div class="colors">
+                <p>Choississez vos couleurs:</p>
+                <div>
+                    <input type="color" id="textColor" name="text" value="#e66465">
+                    <label for="text">Texte</label>
+                </div>
+
+                <div>
+                    <input type="color" id="bodyColor" name="body" value="#f6b73c">
+                    <label for="body">Post-it</label>
+                </div>
+            </div>
+            <div class="font">
+                <select name="font" id="fontSelect">
+                    <option value="">-- Choississez une police --</option>
+                    <option value="roboto">Roboto</option>
+                    <option value="poppins">Poppins</option>
+                    <option value="bebas">Bebas Neue</option>
+                    <option value="hahmlet">Hahmlet</option>
+                    <option value="dancing">Dancing</option>
+                    <option value="pacifico">Pacifico</option>
+                    <option value="sacramento">Sacramento</option>
+                </select>
+            </div>
+        </aside>
 
     </main>
     <footer>
