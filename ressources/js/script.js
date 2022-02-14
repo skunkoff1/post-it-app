@@ -64,7 +64,7 @@ class Postit {
     textContent; // contenu texte du pos-it
 
 
-    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = -30, textColor = "black", textSize = "22px", textFont = "'Robot', sans-serif", backColor = "green", textContent = "test") {
+    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = -30, textColor = "black", textSize = 40, textFont = "Dancing", backColor = "green", textContent = "test") {
         this.posX = x;
         this.posY = y;
         this.width = width;
@@ -81,6 +81,7 @@ class Postit {
         this.text.style.height = this.height;
         this.post.style.left = this.posX;
         this.post.style.top = this.posY;
+        this.rotate = rotate;
         this.zIndex = zIndex;
         this.post.style.zIndex = this.zIndex;
         this.erase.className = "erase";
@@ -91,8 +92,6 @@ class Postit {
         this.text.style.backgroundColor = backColor;
         this.post.style.backgroundColor = backColor;
         this.text.style.color = textColor;
-        this.text.style.fontSize = textSize;
-        this.text.style.fontFamily = textFont;
         this.post.style.transform = "rotate(" + rotate + "deg)";
         this.text.setAttribute("spellcheck", "false");
         this.cross.className = "cross";
@@ -103,6 +102,8 @@ class Postit {
         // Afin de pouvoir mettre à jour les z-index et trié les post-it
         // J'enregistre la div et le z-index
         postItArray.push([this.post, this.zIndex, this.rotate]);
+        updateFont(textFont);
+        updateFontSize(textSize);
         // Ecouteurs d'évènements
         this.post.addEventListener('mousedown', this.startDrag.bind(this));
         this.post.addEventListener('mouseup', this.stopDrag.bind(this));
@@ -392,7 +393,7 @@ function save() {
     localStorage.clear();
     if (postItArray != 0) {
         for (const elmt of postItArray) {
-            console.log("height : " + elmt[0].childNodes[0].style.height)
+            console.log("height : " + elmt[0].childNodes[0].style.height);
         }
     }
 }
