@@ -63,31 +63,34 @@ class Postit {
     backColor; // couleur du post-it
     textContent; // contenu texte du pos-it
 
-
-    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = -30, textColor = "black", textSize = 40, textFont = "Dancing", backColor = "green", textContent = "test") {
+    // Constructeur avec paramètres par défaut
+    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = 0, textColor = "black", textSize = 22, textFont = "Roboto", backColor = "#e2e265", textContent = "") {
         this.posX = x;
         this.posY = y;
         this.width = width;
         this.height = height;
         this.isDraging = false;
         this.isResizing = false;
+        this.rotate = rotate;
+        this.zIndex = zIndex;
+        // Création des composants du post-it et récupération du container
         this.post = document.createElement("div");
         this.text = document.createElement('textarea');
         this.erase = document.createElement('div');
         this.cross = document.createElement('div');
         let board = document.querySelector('.board');
+        // Attribution des valeurs 
         this.post.className = "post-it";
         this.text.style.width = this.width;
         this.text.style.height = this.height;
         this.post.style.left = this.posX;
         this.post.style.top = this.posY;
-        this.rotate = rotate;
-        this.zIndex = zIndex;
         this.post.style.zIndex = this.zIndex;
         this.erase.className = "erase";
         this.erase.style.width = "30px";
         this.erase.style.display = "none";
         this.text.className = "text";
+        // Attribution du contenu, des propriétés 
         this.text.value = textContent;
         this.text.style.backgroundColor = backColor;
         this.post.style.backgroundColor = backColor;
@@ -95,6 +98,7 @@ class Postit {
         this.post.style.transform = "rotate(" + rotate + "deg)";
         this.text.setAttribute("spellcheck", "false");
         this.cross.className = "cross";
+        // Création de la structure HTML du post-it et envoi dans le DOM
         this.post.appendChild(this.text);
         this.post.appendChild(this.erase);
         this.erase.appendChild(this.cross);
@@ -102,6 +106,7 @@ class Postit {
         // Afin de pouvoir mettre à jour les z-index et trié les post-it
         // J'enregistre la div et le z-index
         postItArray.push([this.post, this.zIndex, this.rotate]);
+        // Application de la taille et du style de la police
         updateFont(textFont);
         updateFontSize(textSize);
         // Ecouteurs d'évènements
@@ -214,9 +219,10 @@ class Postit {
             this.post.remove();
         }
     }
-}
+} 
+/*======================== FIN DU CONSTRUCTEUR ================================*/
 
-// Fonction gérant les modes et l'affichage des boutoons de mode
+// Fonction gérant les modes et l'affichage des boutons de mode
 function mode(mode) {
     // Variable qui va stocker le current bouton
     let targetButton;
@@ -286,7 +292,7 @@ function mode(mode) {
             }
             break;
         default:
-            console.error("probleme sur le switch es modes");
+            console.error("probleme sur le switch des modes");
             break;
     }
 
@@ -303,7 +309,7 @@ function mode(mode) {
     targetButton.style.backgroundColor = "rgb(18, 187, 18)";
 }
 
-// Fonction créer un post it
+// Fonction créer un post it relié au bouton
 function addPostIt() {
     new Postit();
 }
@@ -398,12 +404,17 @@ function save() {
     }
 }
 
-function sliceRgb(string) {
-    string = string.substring(4, string.length - 2);
-    string = string.split(", ");
-    string = rgbToHex(string[0], string[1], string[2]);
-    return string;
-}
+// Fonction load le local storage et création des objets post-it
+
+
+
+// FONCTION CONVERSION RGB TO HEXADECIMAL
+// function sliceRgb(string) {
+//     string = string.substring(4, string.length - 2);
+//     string = string.split(", ");
+//     string = rgbToHex(string[0], string[1], string[2]);
+//     return string;
+// }
 
 // function rgbToHex(r, g, b) {
 //     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
