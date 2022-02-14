@@ -20,7 +20,7 @@ fontSelect.addEventListener("change", updateFont, false);
 let fontSizeSelect = document.getElementById('fontSizeSelect');
 fontSizeSelect.addEventListener("change", updateFontSize, false);
 // Fonction sauvegarde en local Storage
-document.addEventListener('change', save);
+window.addEventListener("change", updateStorage, false);
 
 // Récupération des boutons
 let buttonDrag = document.getElementById('modeButtonDrag');
@@ -64,7 +64,7 @@ class Postit {
     textContent; // contenu texte du pos-it
 
     // Constructeur avec paramètres par défaut
-    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = 0, textColor = "black", textSize = 22, textFont = "Roboto", backColor = "#e2e265", textContent = "") {
+    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = 0, textColor = "black", backColor = "#e2e265",textSize = "font22", textFont = "Roboto",  textContent = "test") {
         this.posX = x;
         this.posY = y;
         this.width = width;
@@ -73,6 +73,10 @@ class Postit {
         this.isResizing = false;
         this.rotate = rotate;
         this.zIndex = zIndex;
+        console.log(this.zIndex);
+        if(max<= zIndex) {
+            max=zIndex+1;
+        }
         // Création des composants du post-it et récupération du container
         this.post = document.createElement("div");
         this.text = document.createElement('textarea');
@@ -83,8 +87,8 @@ class Postit {
         this.post.className = "post-it";
         this.text.style.width = this.width;
         this.text.style.height = this.height;
-        this.post.style.left = this.posX;
-        this.post.style.top = this.posY;
+        this.post.style.left = x;
+        this.post.style.top = y;
         this.post.style.zIndex = this.zIndex;
         this.erase.className = "erase";
         this.erase.style.width = "30px";
@@ -358,30 +362,36 @@ function updatePostItColor(e) {
 }
 
 // Fonction mis à jour de la police
-function updateFont() {
+function updateFont(family) {
     // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
     sortArray();
     if (postItArray.length != 0) {
-        postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + fontSelect.value;
-
+        if(fontSelect !=null) {
+            postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + fontSelect.value;
+        }
+        else {
+            postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + family;
+        }
     }
 }
 
 // Fonction changeant la taille de la police du post-it sélectionné
-function updateFontSize() {
+function updateFontSize(size) {
     // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
     sortArray();
     if (postItArray.length != 0) {
-        console.log(fontSizeSelect.value)
-        postItArray[postItArray.length - 1][0].childNodes[0].id = "font" + fontSizeSelect.value;
-
-    }
+        if(fontSizeSelect.value!=null) {
+            postItArray[postItArray.length - 1][0].childNodes[0].id = fontSizeSelect.value;
+        }
+        else {
+            postItArray[postItArray.length - 1][0].childNodes[0].id = size;
+        }
+     }
 }
 
 // Fonction rotation post-it
 function rotate(direction) {
     sortArray();
-    console.log("wesh")
     if (postItArray.length != 0) {
         if (direction == 'left') {
             postItArray[postItArray.length - 1][2] -= 15;
@@ -395,16 +405,35 @@ function rotate(direction) {
 }
 
 // Fonction sauvegarde dans le local storage
-function save() {
+function updateStorage() {
+    let item =0;
     localStorage.clear();
-    if (postItArray != 0) {
+    if (postItArray.length != 0) {
         for (const elmt of postItArray) {
-            console.log("height : " + elmt[0].childNodes[0].style.height);
+            item++;
+            let fontFamily = elmt[0].childNodes[0].className;
+            fontFamily = fontFamily.substring(5, fontFamily.length);
+            localStorage.setItem(item, elmt[0].style.left+"*"+ elmt[0].style.top+"*"+elmt[0].childNodes[0].style.height+"*"+elmt[0].childNodes[0].style.width+"*"+ elmt[0].style.zIndex + "*" +elmt[2]+"*"+ elmt[0].childNodes[0].style.color+"*"+elmt[0].childNodes[0].style.backgroundColor+"*"+ elmt[0].childNodes[0].id+"*"+fontFamily+"*"+elmt[0].childNodes[0].value);
+            console.log(elmt[0].style.left+"*"+ elmt[0].style.top+"*"+elmt[0].childNodes[0].style.height+"*"+elmt[0].childNodes[0].style.width+"*"+ elmt[0].style.zIndex + "*" +elmt[2]+"*"+ elmt[0].childNodes[0].style.color+"*"+elmt[0].childNodes[0].style.backgroundColor+"*"+ elmt[0].childNodes[0].id+"*"+fontFamily+"*"+elmt[0].childNodes[0].value);
         }
     }
 }
 
 // Fonction load le local storage et création des objets post-it
+function loadStorage() {
+    for(let i=1; i<=localStorage.length; i++) {
+        let params = localStorage.getItem(i);
+        params = params.split("*");
+        console.log(params)
+        new Postit(params[0], params[1], params[2], params[3], parseInt(params[4]), parseInt(params[5]),params[6],params[7], params[8], params[9], params[10]);
+    }
+}
+
+
+// setInterval(() => {
+//     updateStorage();
+// }, 1000);
+
 
 
 

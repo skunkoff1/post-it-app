@@ -7,7 +7,7 @@
     <link media="screen" rel="stylesheet" type="text/css" href="./ressources/css/style.css">
 </head>
 
-<body>
+<body onload="loadStorage()">
 
     <header class="title">
         <div>
@@ -23,6 +23,7 @@
         <button type="button" id="addPostIt" onclick="addPostIt()">ajouter un Post-It</button>
     </header>
     <main class="board">
+        <button type="button" id="test" onclick="test()">TEST</button>
 
     </main>
     <aside id="asideBar">
@@ -55,17 +56,17 @@
             <label for="fontSizeSelect">Taille de Police</label>
             <select name="fontSize" id="fontSizeSelect">
                 <option value="">-- taille de la police --</option>
-                <option value="20">20px</option>
-                <option value="22">22px</option>
-                <option value="24">24px</option>
-                <option value="26">26px</option>
-                <option value="28">28px</option>
-                <option value="30">30px</option>
-                <option value="32">32px</option>
-                <option value="34">34px</option>
-                <option value="36">36px</option>
-                <option value="38">38px</option>
-                <option value="40">40px</option>
+                <option value="font20">20px</option>
+                <option value="font22">22px</option>
+                <option value="font24">24px</option>
+                <option value="font26">26px</option>
+                <option value="font28">28px</option>
+                <option value="font30">30px</option>
+                <option value="font32">32px</option>
+                <option value="font34">34px</option>
+                <option value="font36">36px</option>
+                <option value="font38">38px</option>
+                <option value="font40">40px</option>
             </select>
         </div>
         <div class="rotateDiv">
