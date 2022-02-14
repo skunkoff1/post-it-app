@@ -5,12 +5,18 @@ let eraseMode = false; // Flag bouton redimensionner post-it
 let editMode = false; // Flag bouton redimensionner post-it
 let asideBar = document.getElementById('asideBar');
 let max = 0;
+// Input changer couleur texte postit et son event listener
 let textColor = document.getElementById('textColor');
 textColor.addEventListener("input", updateTextColor, false);
+// Input changer couleur background postit et son event listener
 let postItColor = document.getElementById('bodyColor');
 postItColor.addEventListener("input", updatePostItColor, false);
+// Select changer font family texte postit et son event listener
 let fontSelect = document.getElementById('fontSelect');
 fontSelect.addEventListener("change", updateFont, false);
+// Input changer taille texte postit pour son event listener
+let fontSizeSelect = document.getElementById('fontSizeSelect');
+fontSizeSelect.addEventListener("change", updateFontSize, false);
 
 // Récupération des boutons
 let buttonDrag = document.getElementById('modeButtonDrag');
@@ -18,6 +24,7 @@ let buttonResize = document.getElementById('modeButtonResize');
 let buttonErase = document.getElementById('modeButtonErase');
 let buttonEdit = document.getElementById('modeButtonEdit');
 
+// Je met les boutons dans un tableau pour factoriser
 let buttonArray = [buttonDrag, buttonResize, buttonErase, buttonEdit];
 
 // Style par défaut des boutons -> mode par défaut == deplacer
@@ -71,7 +78,7 @@ class Postit {
         this.zIndex = max;
         this.post.style.zIndex = this.zIndex;
         this.erase.className = "erase";
-        this.erase.style.width = "100%";
+        this.erase.style.width = "30px";
         this.erase.style.display = "none";
         this.text.className = "text";
         this.text.setAttribute("spellcheck", "false");
@@ -98,14 +105,14 @@ class Postit {
     startDrag(e) {
             // Si le mode déplacer est enclenché
             if (dragMode) {
-                // On passe la div en mode déplacement possible
+                // Je passe la div en mode déplacement possible
                 this.isDraging = true;
                 // la div selectionné voit son z-index passé au max
                 this.post.style.zIndex = max + 1;
-                // On enregistre la position de départ de la souris afin de calculer le déplacement
+                // Je enregistre la position de départ de la souris afin de calculer le déplacement
                 this.xOnStart = e.clientX + window.pageXOffset;
                 this.yOnStart = e.clientY + window.pageYOffset;
-                // on passe tous les pos-it en transparent
+                // Je passe tous les pos-it en transparent
                 postItArray.forEach((item) => {
                     item[0].style.opacity = "0.6";
                 })
@@ -127,14 +134,14 @@ class Postit {
             searchMax();
             // Si le mode déplacer est enclenché
             if (dragMode) {
-                // On passe la div en mode déplacement impossible
+                // Je passe la div en mode déplacement impossible
                 this.isDraging = false;
                 // la div selectionné voit son z-index passé au max
                 this.post.style.zIndex = max;
-                // on met à jour sa position
+                // Je met à jour sa position
                 this.posX = this.post.style.left;
                 this.posY = this.post.style.top;
-                // on met à jour le z-index dans le tableau de post it
+                // Je met à jour le z-index dans le tableau de post it
                 postItArray.forEach((item) => {
                     item[0].style.opacity = "1";
                 })
@@ -144,7 +151,7 @@ class Postit {
                 // la div selectionné voit son z-index passé au max
                 this.post.style.zIndex = max;
             }
-            // on met à jour le z-index dans le tableau de post it
+            // Je met à jour le z-index dans le tableau de post it
             postItArray.forEach((item) => {
                 if (item[0] == this.post) {
                     item[1] = max;
@@ -157,6 +164,7 @@ class Postit {
         if (this.isDraging && dragMode) {
             this.post.style.left = parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart + "px";
             this.post.style.top = parseInt(e.clientY) + parseInt(this.posY) - this.yOnStart + "px";
+            // Gestion des limites de la zone post-it
             if ((parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart) <= (window.innerWidth / 10)) {
                 this.post.style.left = window.innerWidth / 10 + "px";
             }
@@ -177,7 +185,7 @@ class Postit {
         if (eraseMode) {
             searchMax();
 
-            // On cherche le post it et on redéfinit son z-index
+            // Je cherche le post it et Je redéfinis son z-index
             postItArray.forEach((item) => {
                     if (item[0] == this.post) {
                         item[1] = max + 1;
@@ -185,27 +193,31 @@ class Postit {
                 })
                 // Tri du tableau de post-it en fonction de leur z-index croissant
             sortArray();
-            //  et on efface le dernier élément du tableau        
+            //  et j'efface le dernier élément du tableau        
             postItArray.pop();
-            // on efface la div du DOM
+            // j'efface la div du DOM
             this.post.remove();
         }
     }
 }
 
-// Fonction gérant les modes et l'affichage des boutrons de mode
+// Fonction gérant les modes et l'affichage des boutoons de mode
 function mode(mode) {
+    // Variable qui va stocker le current bouton
     let targetButton;
+    // Je mets tous les modes à false
     eraseMode = false;
     dragMode = false;
     resizeMode = false;
     editMode = false;
+    // Si le tableau de post it n'est pas vide, j'efface le focus du dernier post-it
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].style.border = "none";
     }
     switch (mode) {
         case 'drag':
             dragMode = true;
+            // Animation sidebar -> je la cache
             asideBar.className = "hide";
             targetButton = buttonDrag;
             postItArray.forEach((item) => {
@@ -215,6 +227,7 @@ function mode(mode) {
             })
             break;
         case 'resize':
+            // Animation sidebar -> je la cache
             asideBar.className = "hide";
             resizeMode = true;
             targetButton = buttonResize;
@@ -225,6 +238,7 @@ function mode(mode) {
             })
             break;
         case 'erase':
+            // Animation sidebar -> je la cache
             asideBar.className = "hide";
             eraseMode = true;
             targetButton = buttonErase;
@@ -235,6 +249,7 @@ function mode(mode) {
             })
             break;
         case 'edit':
+            // Animation sidebar -> je la déploie
             asideBar.className = "deploy";
             editMode = true;
             targetButton = buttonEdit;
@@ -249,16 +264,18 @@ function mode(mode) {
             }
             break;
         default:
+            console.error("probleme sur le switch es modes");
             break;
     }
 
+    // Gestion du display des boutons hors current
     for (const elmt of buttonArray) {
         if (elmt != targetButton) {
             elmt.style.height = "40px";
             elmt.style.width = "150px";
             elmt.style.backgroundColor = "rgb(226, 48, 48)";
         }
-    }
+    } //Gestion du display du current bouton
     targetButton.style.height = "60px";
     targetButton.style.width = "180px";
     targetButton.style.backgroundColor = "rgb(18, 187, 18)";
@@ -269,6 +286,7 @@ function addPostIt() {
     new Postit(500, 400, 150, 150);
 }
 
+// Fonction qui recherche l'indice max et le redéfinit à +1
 function searchMax() {
     postItArray.forEach((item) => {
         if (item[1] >= max) {
@@ -288,26 +306,46 @@ function sortArray() {
     })
 }
 
+// Fonction changement couleur du texte post-it selectionné
 function updateTextColor(e) {
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
     sortArray();
+    // Si le tableau n'est pas vide, je change la couleur du texte du post-it 
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].childNodes[0].style.color = e.target.value;
     }
 }
 
+// Fonction changement couleur du post-it selectionné
 function updatePostItColor(e) {
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
     sortArray();
+    // Si le tableau n'est pas vide, je change la couleur du textarea et de la div
     if (postItArray.length != 0) {
-        console.log(e.target.value)
+        //textarea
         postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor = e.target.value;
+        //div
         postItArray[postItArray.length - 1][0].style.backgroundColor = e.target.value;
     }
 }
 
+// Fonction mis à jour de la police
 function updateFont() {
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
     sortArray();
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + fontSelect.value;
+
+    }
+}
+
+// Fonction changeant la taille de la police du post-it sélectionné
+function updateFontSize() {
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
+    sortArray();
+    if (postItArray.length != 0) {
+        console.log(fontSizeSelect.value)
+        postItArray[postItArray.length - 1][0].childNodes[0].id = "font" + fontSizeSelect.value;
 
     }
 }

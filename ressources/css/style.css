@@ -215,7 +215,7 @@ select {
 }
 
 
-/*==================== FONT SELECT ============================*/
+/*==================== FONT FAMILY ============================*/
 
 .roboto {
     font-family: 'Roboto', sans-serif;
@@ -243,6 +243,53 @@ select {
 
 .sacramento {
     font-family: 'Sacramento', cursive;
+}
+
+
+/*====================== FONT SIZE ===============================*/
+
+#font20 {
+    font-size: 20px;
+}
+
+#font22 {
+    font-size: 22px;
+}
+
+#font24 {
+    font-size: 24px;
+}
+
+#font26 {
+    font-size: 26px;
+}
+
+#font28 {
+    font-size: 28px;
+}
+
+#font30 {
+    font-size: 30px;
+}
+
+#font32 {
+    font-size: 32px;
+}
+
+#font34 {
+    font-size: 34px;
+}
+
+#font36 {
+    font-size: 36px;
+}
+
+#font38 {
+    font-size: 38px;
+}
+
+#font40 {
+    font-size: 40px;
 }
 
 
