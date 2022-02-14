@@ -23,50 +23,61 @@
         <button type="button" id="addPostIt" onclick="addPostIt()">ajouter un Post-It</button>
     </header>
     <main class="board">
-        <aside id="asideBar">
-            <div class="colors">
-                <p>Choississez vos couleurs:</p>
-                <div>
-                    <input type="color" id="textColor" name="text" value="#e66465">
-                    <label for="text">Texte</label>
-                </div>
-
-                <div>
-                    <input type="color" id="bodyColor" name="body" value="#f6b73c">
-                    <label for="body">Post-it</label>
-                </div>
-            </div>
-            <div class="font">
-                <select name="font" id="fontSelect">
-                    <option value="">-- Choississez une police --</option>
-                    <option value="roboto">Roboto</option>
-                    <option value="poppins">Poppins</option>
-                    <option value="bebas">Bebas Neue</option>
-                    <option value="hahmlet">Hahmlet</option>
-                    <option value="dancing">Dancing</option>
-                    <option value="pacifico">Pacifico</option>
-                    <option value="sacramento">Sacramento</option>
-                </select>
-            </div>
-            <div class="fontSize">
-                <select name="fontSize" id="fontSizeSelect">
-                    <option value="">-- taille de la police --</option>
-                    <option value="20">20px</option>
-                    <option value="22">22px</option>
-                    <option value="24">24px</option>
-                    <option value="26">26px</option>
-                    <option value="28">28px</option>
-                    <option value="30">30px</option>
-                    <option value="32">32px</option>
-                    <option value="34">34px</option>
-                    <option value="36">36px</option>
-                    <option value="38">38px</option>
-                    <option value="40">40px</option>
-                </select>
-            </div>
-        </aside>
 
     </main>
+    <aside id="asideBar">
+        <div class="colors">
+            <p>Choississez vos couleurs:</p>
+            <div>
+                <input type="color" id="textColor" name="text" value="#e66465">
+                <label for="text">Texte</label>
+            </div>
+
+            <div>
+                <input type="color" id="bodyColor" name="body" value="#f6b73c">
+                <label for="body">Post-it</label>
+            </div>
+        </div>
+        <div class="font">
+            <label for="fontSelect">Style de Police</label>
+            <select name="font" id="fontSelect">
+                <option value="">-- Choississez une police --</option>
+                <option value="roboto">Roboto</option>
+                <option value="poppins">Poppins</option>
+                <option value="bebas">Bebas Neue</option>
+                <option value="hahmlet">Hahmlet</option>
+                <option value="dancing">Dancing</option>
+                <option value="pacifico">Pacifico</option>
+                <option value="sacramento">Sacramento</option>
+            </select>
+        </div>
+        <div class="fontSize">
+            <label for="fontSizeSelect">Taille de Police</label>
+            <select name="fontSize" id="fontSizeSelect">
+                <option value="">-- taille de la police --</option>
+                <option value="20">20px</option>
+                <option value="22">22px</option>
+                <option value="24">24px</option>
+                <option value="26">26px</option>
+                <option value="28">28px</option>
+                <option value="30">30px</option>
+                <option value="32">32px</option>
+                <option value="34">34px</option>
+                <option value="36">36px</option>
+                <option value="38">38px</option>
+                <option value="40">40px</option>
+            </select>
+        </div>
+        <div class="rotateDiv">
+            <p>Pivoter</p>
+            <div class="rotateButton" id="rotateLeft" onclick="rotate('left')">
+                <div class="leftArrow"></div>
+            </div>
+            <div class="rotateButton" id="rotateRight" onclick="rotate('right')">
+                <div class="rightArrow"></div>
+            </div>
+        </div>
+    </aside>
     <footer>
         <p>&copy; DIDRICH Damien 2022</p>
     </footer>

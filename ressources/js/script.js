@@ -5,6 +5,8 @@ let eraseMode = false; // Flag bouton redimensionner post-it
 let editMode = false; // Flag bouton redimensionner post-it
 let asideBar = document.getElementById('asideBar');
 let max = 0;
+searchMax();
+let barDeployed = false;
 // Input changer couleur texte postit et son event listener
 let textColor = document.getElementById('textColor');
 textColor.addEventListener("input", updateTextColor, false);
@@ -14,9 +16,11 @@ postItColor.addEventListener("input", updatePostItColor, false);
 // Select changer font family texte postit et son event listener
 let fontSelect = document.getElementById('fontSelect');
 fontSelect.addEventListener("change", updateFont, false);
-// Input changer taille texte postit pour son event listener
+// Input changer taille texte postit et son event listener
 let fontSizeSelect = document.getElementById('fontSizeSelect');
 fontSizeSelect.addEventListener("change", updateFontSize, false);
+// Fonction sauvegarde en local Storage
+document.addEventListener('change', save);
 
 // Récupération des boutons
 let buttonDrag = document.getElementById('modeButtonDrag');
@@ -52,8 +56,15 @@ class Postit {
     cross; //la croix dans la div erase
     xOnStart; // sa position horizontal de départ pour calculer le déplacement
     yOnStart; // sa position verticale de départ pour calculer le déplacement
+    rotate; // son angle
+    textColor; // couleur de police
+    textSize; // taille police
+    textFont; // Style de police
+    backColor; // couleur du post-it
+    textContent; // contenu texte du pos-it
 
-    constructor(x, y, width, height) {
+
+    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = -30, textColor = "black", textSize = "22px", textFont = "'Robot', sans-serif", backColor = "green", textContent = "test") {
         this.posX = x;
         this.posY = y;
         this.width = width;
@@ -64,23 +75,25 @@ class Postit {
         this.text = document.createElement('textarea');
         this.erase = document.createElement('div');
         this.cross = document.createElement('div');
-        this.createPostIt();
-    }
-
-    createPostIt() {
-        searchMax();
         let board = document.querySelector('.board');
         this.post.className = "post-it";
-        this.text.style.width = this.width + "px";
-        this.text.style.height = this.height + "px";
-        this.post.style.left = this.posX + "px";
-        this.post.style.top = this.posY + "px";
-        this.zIndex = max;
+        this.text.style.width = this.width;
+        this.text.style.height = this.height;
+        this.post.style.left = this.posX;
+        this.post.style.top = this.posY;
+        this.zIndex = zIndex;
         this.post.style.zIndex = this.zIndex;
         this.erase.className = "erase";
         this.erase.style.width = "30px";
         this.erase.style.display = "none";
         this.text.className = "text";
+        this.text.value = textContent;
+        this.text.style.backgroundColor = backColor;
+        this.post.style.backgroundColor = backColor;
+        this.text.style.color = textColor;
+        this.text.style.fontSize = textSize;
+        this.text.style.fontFamily = textFont;
+        this.post.style.transform = "rotate(" + rotate + "deg)";
         this.text.setAttribute("spellcheck", "false");
         this.cross.className = "cross";
         this.post.appendChild(this.text);
@@ -89,7 +102,7 @@ class Postit {
         board.appendChild(this.post);
         // Afin de pouvoir mettre à jour les z-index et trié les post-it
         // J'enregistre la div et le z-index
-        postItArray.push([this.post, this.zIndex]);
+        postItArray.push([this.post, this.zIndex, this.rotate]);
         // Ecouteurs d'évènements
         this.post.addEventListener('mousedown', this.startDrag.bind(this));
         this.post.addEventListener('mouseup', this.stopDrag.bind(this));
@@ -98,6 +111,7 @@ class Postit {
         this.post.addEventListener('touchend', this.stopDrag.bind(this));
         this.post.addEventListener('touchmove', this.drag.bind(this));
         this.erase.addEventListener('click', this.erasePostIt.bind(this));
+
     }
 
     // Fonction déplacer ou redimensionner post-it
@@ -218,7 +232,9 @@ function mode(mode) {
         case 'drag':
             dragMode = true;
             // Animation sidebar -> je la cache
-            asideBar.className = "hide";
+            if (barDeployed) {
+                asideBar.className = "hide";
+            }
             targetButton = buttonDrag;
             postItArray.forEach((item) => {
                 item[0].childNodes[0].style.resize = "none";
@@ -228,7 +244,9 @@ function mode(mode) {
             break;
         case 'resize':
             // Animation sidebar -> je la cache
-            asideBar.className = "hide";
+            if (barDeployed) {
+                asideBar.className = "hide";
+            }
             resizeMode = true;
             targetButton = buttonResize;
             postItArray.forEach((item) => {
@@ -239,7 +257,9 @@ function mode(mode) {
             break;
         case 'erase':
             // Animation sidebar -> je la cache
-            asideBar.className = "hide";
+            if (barDeployed) {
+                asideBar.className = "hide";
+            }
             eraseMode = true;
             targetButton = buttonErase;
             postItArray.forEach((item) => {
@@ -251,6 +271,7 @@ function mode(mode) {
         case 'edit':
             // Animation sidebar -> je la déploie
             asideBar.className = "deploy";
+            barDeployed = true;
             editMode = true;
             targetButton = buttonEdit;
             postItArray.forEach((item) => {
@@ -283,7 +304,7 @@ function mode(mode) {
 
 // Fonction créer un post it
 function addPostIt() {
-    new Postit(500, 400, 150, 150);
+    new Postit();
 }
 
 // Fonction qui recherche l'indice max et le redéfinit à +1
@@ -347,6 +368,32 @@ function updateFontSize() {
         console.log(fontSizeSelect.value)
         postItArray[postItArray.length - 1][0].childNodes[0].id = "font" + fontSizeSelect.value;
 
+    }
+}
+
+// Fonction rotation post-it
+function rotate(direction) {
+    sortArray();
+    console.log("wesh")
+    if (postItArray.length != 0) {
+        if (direction == 'left') {
+            postItArray[postItArray.length - 1][2] -= 15;
+            postItArray[postItArray.length - 1][0].style.transform = "rotate(" + postItArray[postItArray.length - 1][2] + "deg)";
+        }
+        if (direction == 'right') {
+            postItArray[postItArray.length - 1][2] += 15;
+            postItArray[postItArray.length - 1][0].style.transform = "rotate(" + postItArray[postItArray.length - 1][2] + "deg)";
+        }
+    }
+}
+
+// Fonction sauvegarde dans le local storage
+function save() {
+    localStorage.clear();
+    if (postItArray != 0) {
+        for (const elmt of postItArray) {
+            console.log("height : " + elmt[0].childNodes[0].style.height)
+        }
     }
 }
 
