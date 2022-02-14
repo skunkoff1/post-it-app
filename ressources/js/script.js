@@ -64,7 +64,7 @@ class Postit {
     textContent; // contenu texte du pos-it
 
     // Constructeur avec paramètres par défaut
-    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = 0, textColor = "black", backColor = "#e2e265",textSize = "font22", textFont = "Roboto",  textContent = "test") {
+    constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = 0, textColor = "", backColor = "", textSize = "", textFont = "", textContent = "") {
         this.posX = x;
         this.posY = y;
         this.width = width;
@@ -73,9 +73,8 @@ class Postit {
         this.isResizing = false;
         this.rotate = rotate;
         this.zIndex = zIndex;
-        console.log(this.zIndex);
-        if(max<= zIndex) {
-            max=zIndex+1;
+        if (max <= zIndex) {
+            max = zIndex + 1;
         }
         // Création des composants du post-it et récupération du container
         this.post = document.createElement("div");
@@ -96,8 +95,14 @@ class Postit {
         this.text.className = "text";
         // Attribution du contenu, des propriétés 
         this.text.value = textContent;
+        if (backColor == "") {
+            backColor = "#e2e265";
+        }
         this.text.style.backgroundColor = backColor;
         this.post.style.backgroundColor = backColor;
+        if (textColor == "") {
+            textColor = "black";
+        }
         this.text.style.color = textColor;
         this.post.style.transform = "rotate(" + rotate + "deg)";
         this.text.setAttribute("spellcheck", "false");
@@ -111,8 +116,14 @@ class Postit {
         // J'enregistre la div et le z-index
         postItArray.push([this.post, this.zIndex, this.rotate]);
         // Application de la taille et du style de la police
-        updateFont(textFont);
-        updateFontSize(textSize);
+        if (textFont == "") {
+            textFont = "Roboto";
+        }
+        if (textSize == "") {
+            textSize = "font22";
+        }
+        postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + textFont;
+        postItArray[postItArray.length - 1][0].childNodes[0].id = textSize;
         // Ecouteurs d'évènements
         this.post.addEventListener('mousedown', this.startDrag.bind(this));
         this.post.addEventListener('mouseup', this.stopDrag.bind(this));
@@ -127,63 +138,63 @@ class Postit {
     // Fonction déplacer ou redimensionner post-it
     // lorsque le click est enfoncé
     startDrag(e) {
-            // Si le mode déplacer est enclenché
-            if (dragMode) {
-                // Je passe la div en mode déplacement possible
-                this.isDraging = true;
-                // la div selectionné voit son z-index passé au max
-                this.post.style.zIndex = max + 1;
-                // Je enregistre la position de départ de la souris afin de calculer le déplacement
-                this.xOnStart = e.clientX + window.pageXOffset;
-                this.yOnStart = e.clientY + window.pageYOffset;
-                // Je passe tous les pos-it en transparent
-                postItArray.forEach((item) => {
-                    item[0].style.opacity = "0.6";
-                })
-            }
-            // Si le mode redimensionner est enclenché
-            if (resizeMode || eraseMode) {
-                // la div selectionné voit son z-index passé au max
-                this.post.style.zIndex = max + 1;
-            }
-            if (editMode) {
-                this.post.style.zIndex = max + 1;
-                postItArray[postItArray.length - 1][0].style.border = "none";
-                // postItColor.value = (sliceRgb(postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor));
-            }
-        }
-        // fonction déplacer ou redimensionner post-it
-        // lorsque le click est relaché
-    stopDrag(e) {
-            searchMax();
-            // Si le mode déplacer est enclenché
-            if (dragMode) {
-                // Je passe la div en mode déplacement impossible
-                this.isDraging = false;
-                // la div selectionné voit son z-index passé au max
-                this.post.style.zIndex = max;
-                // Je met à jour sa position
-                this.posX = this.post.style.left;
-                this.posY = this.post.style.top;
-                // Je met à jour le z-index dans le tableau de post it
-                postItArray.forEach((item) => {
-                    item[0].style.opacity = "1";
-                })
-            }
-            // si le mode redimensionner est enclecnché
-            if (resizeMode || editMode) {
-                // la div selectionné voit son z-index passé au max
-                this.post.style.zIndex = max;
-            }
-            // Je met à jour le z-index dans le tableau de post it
+        // Si le mode déplacer est enclenché
+        if (dragMode) {
+            // Je passe la div en mode déplacement possible
+            this.isDraging = true;
+            // la div selectionné voit son z-index passé au max
+            this.post.style.zIndex = max + 1;
+            // Je enregistre la position de départ de la souris afin de calculer le déplacement
+            this.xOnStart = e.clientX + window.pageXOffset;
+            this.yOnStart = e.clientY + window.pageYOffset;
+            // Je passe tous les pos-it en transparent
             postItArray.forEach((item) => {
-                if (item[0] == this.post) {
-                    item[1] = max;
-                }
+                item[0].style.opacity = "0.6";
             })
         }
-        // Fonction déplacer post-it
-        // lors du déplacement de la souris
+        // Si le mode redimensionner est enclenché
+        if (resizeMode || eraseMode) {
+            // la div selectionné voit son z-index passé au max
+            this.post.style.zIndex = max + 1;
+        }
+        if (editMode) {
+            this.post.style.zIndex = max + 1;
+            postItArray[postItArray.length - 1][0].style.border = "none";
+            // postItColor.value = (sliceRgb(postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor));
+        }
+    }
+    // fonction déplacer ou redimensionner post-it
+    // lorsque le click est relaché
+    stopDrag(e) {
+        searchMax();
+        // Si le mode déplacer est enclenché
+        if (dragMode) {
+            // Je passe la div en mode déplacement impossible
+            this.isDraging = false;
+            // la div selectionné voit son z-index passé au max
+            this.post.style.zIndex = max;
+            // Je met à jour sa position
+            this.posX = this.post.style.left;
+            this.posY = this.post.style.top;
+            // Je met à jour le z-index dans le tableau de post it
+            postItArray.forEach((item) => {
+                item[0].style.opacity = "1";
+            })
+        }
+        // si le mode redimensionner est enclecnché
+        if (resizeMode || editMode) {
+            // la div selectionné voit son z-index passé au max
+            this.post.style.zIndex = max;
+        }
+        // Je met à jour le z-index dans le tableau de post it
+        postItArray.forEach((item) => {
+            if (item[0] == this.post) {
+                item[1] = max;
+            }
+        })
+    }
+    // Fonction déplacer post-it
+    // lors du déplacement de la souris
     drag(e) {
         if (this.isDraging && dragMode) {
             this.post.style.left = parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart + "px";
@@ -211,11 +222,11 @@ class Postit {
 
             // Je cherche le post it et Je redéfinis son z-index
             postItArray.forEach((item) => {
-                    if (item[0] == this.post) {
-                        item[1] = max + 1;
-                    }
-                })
-                // Tri du tableau de post-it en fonction de leur z-index croissant
+                if (item[0] == this.post) {
+                    item[1] = max + 1;
+                }
+            })
+            // Tri du tableau de post-it en fonction de leur z-index croissant
             sortArray();
             //  et j'efface le dernier élément du tableau        
             postItArray.pop();
@@ -223,7 +234,7 @@ class Postit {
             this.post.remove();
         }
     }
-} 
+}
 /*======================== FIN DU CONSTRUCTEUR ================================*/
 
 // Fonction gérant les modes et l'affichage des boutons de mode
@@ -329,7 +340,7 @@ function searchMax() {
 
 // Foncction triant le tableau de post-it par leur z-index croissant
 function sortArray() {
-    postItArray.sort(function(a, b) {
+    postItArray.sort(function (a, b) {
         if (a[1] === b[1]) {
             return 0;
         } else {
@@ -340,7 +351,7 @@ function sortArray() {
 
 // Fonction changement couleur du texte post-it selectionné
 function updateTextColor(e) {
-    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
     // Si le tableau n'est pas vide, je change la couleur du texte du post-it 
     if (postItArray.length != 0) {
@@ -350,7 +361,7 @@ function updateTextColor(e) {
 
 // Fonction changement couleur du post-it selectionné
 function updatePostItColor(e) {
-    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
     // Si le tableau n'est pas vide, je change la couleur du textarea et de la div
     if (postItArray.length != 0) {
@@ -363,30 +374,20 @@ function updatePostItColor(e) {
 
 // Fonction mis à jour de la police
 function updateFont(family) {
-    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
     if (postItArray.length != 0) {
-        if(fontSelect !=null) {
-            postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + fontSelect.value;
-        }
-        else {
-            postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + family;
-        }
+        postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + fontSelect.value;
     }
 }
 
 // Fonction changeant la taille de la police du post-it sélectionné
 function updateFontSize(size) {
-    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand
+    // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
     if (postItArray.length != 0) {
-        if(fontSizeSelect.value!=null) {
-            postItArray[postItArray.length - 1][0].childNodes[0].id = fontSizeSelect.value;
-        }
-        else {
-            postItArray[postItArray.length - 1][0].childNodes[0].id = size;
-        }
-     }
+        postItArray[postItArray.length - 1][0].childNodes[0].id = fontSizeSelect.value;
+    }
 }
 
 // Fonction rotation post-it
@@ -406,26 +407,26 @@ function rotate(direction) {
 
 // Fonction sauvegarde dans le local storage
 function updateStorage() {
-    let item =0;
+    let item = 0;
     localStorage.clear();
     if (postItArray.length != 0) {
         for (const elmt of postItArray) {
             item++;
             let fontFamily = elmt[0].childNodes[0].className;
             fontFamily = fontFamily.substring(5, fontFamily.length);
-            localStorage.setItem(item, elmt[0].style.left+"*"+ elmt[0].style.top+"*"+elmt[0].childNodes[0].style.height+"*"+elmt[0].childNodes[0].style.width+"*"+ elmt[0].style.zIndex + "*" +elmt[2]+"*"+ elmt[0].childNodes[0].style.color+"*"+elmt[0].childNodes[0].style.backgroundColor+"*"+ elmt[0].childNodes[0].id+"*"+fontFamily+"*"+elmt[0].childNodes[0].value);
-            console.log(elmt[0].style.left+"*"+ elmt[0].style.top+"*"+elmt[0].childNodes[0].style.height+"*"+elmt[0].childNodes[0].style.width+"*"+ elmt[0].style.zIndex + "*" +elmt[2]+"*"+ elmt[0].childNodes[0].style.color+"*"+elmt[0].childNodes[0].style.backgroundColor+"*"+ elmt[0].childNodes[0].id+"*"+fontFamily+"*"+elmt[0].childNodes[0].value);
+            localStorage.setItem(item, elmt[0].style.left + "*" + elmt[0].style.top + "*" + elmt[0].childNodes[0].style.height + "*" + elmt[0].childNodes[0].style.width + "*" + elmt[0].style.zIndex + "*" + elmt[2] + "*" + elmt[0].childNodes[0].style.color + "*" + elmt[0].childNodes[0].style.backgroundColor + "*" + elmt[0].childNodes[0].id + "*" + fontFamily + "*" + elmt[0].childNodes[0].value);
+            console.log(elmt[0].style.left + "*" + elmt[0].style.top + "*" + elmt[0].childNodes[0].style.height + "*" + elmt[0].childNodes[0].style.width + "*" + elmt[0].style.zIndex + "*" + elmt[2] + "*" + elmt[0].childNodes[0].style.color + "*" + elmt[0].childNodes[0].style.backgroundColor + "*" + elmt[0].childNodes[0].id + "*" + fontFamily + "*" + elmt[0].childNodes[0].value);
         }
     }
 }
 
 // Fonction load le local storage et création des objets post-it
 function loadStorage() {
-    for(let i=1; i<=localStorage.length; i++) {
+    for (let i = 1; i <= localStorage.length; i++) {
         let params = localStorage.getItem(i);
         params = params.split("*");
-        console.log(params)
-        new Postit(params[0], params[1], params[2], params[3], parseInt(params[4]), parseInt(params[5]),params[6],params[7], params[8], params[9], params[10]);
+        // console.log(params)
+        new Postit(params[0], params[1], params[2], params[3], parseInt(params[4]), parseInt(params[5]), params[6], params[7], params[8], params[9], params[10]);
     }
 }
 
