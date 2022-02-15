@@ -79,6 +79,7 @@ class Postit {
     erase; // la div pour supprimer (coin bas gauche du post-it)
     edit; // la div pour editer ( bas du post-it)..
     cross; //la croix dans la div erase
+    pin; // la div pour la punaise
     xOnStart; // sa position horizontal de départ pour calculer le déplacement
     yOnStart; // sa position verticale de départ pour calculer le déplacement
     rotate; // son angle
@@ -110,12 +111,14 @@ class Postit {
         this.text = document.createElement('textarea');
         this.erase = document.createElement('div');
         this.cross = document.createElement('div');
+        this.pin = document.createElement('div');
         let board = document.querySelector('.board');
         // Attribution des classe 
         this.post.className = "post-it";
         this.text.className = "text";
         this.erase.className = "erase";
         this.cross.className = "cross";
+        this.pin.className = "pin";
         // Attribution des propriétés
         this.post.style.left = x;
         this.post.style.top = y;
@@ -139,6 +142,7 @@ class Postit {
         this.post.appendChild(this.text);
         this.post.appendChild(this.erase);
         this.erase.appendChild(this.cross);
+        this.post.appendChild(this.pin);
         board.appendChild(this.post);
         // Afin de pouvoir mettre à jour les z-index et trié les post-it
         // J'enregistre les propriétés de l'objet dans un tableau div et le z-index
@@ -285,10 +289,31 @@ class Postit {
                     })
                     // Tri du tableau de post-it en fonction de leur z-index croissant
                 sortArray();
-                //  et j'efface le dernier élément du tableau        
-                postItArray.pop();
-                // j'efface la div du DOM
-                this.post.remove();
+                let top = parseInt(postItArray[postItArray.length - 1][2]);
+                let opacity = 1;
+                for (let i = 0; i <= 480; i += 16) {
+                    setTimeout(() => {
+                        opacity -= .05;
+                        this.pin.style.opacity = opacity;
+                        if (i == 480) {
+                            for (let i = 0; i <= 960; i += 16) {
+                                setTimeout(() => {
+                                    top *= 1.042;
+                                    postItArray[postItArray.length - 1][0].style.top = top + "px";
+                                    if (i == 960) {
+                                        // et j 'efface le dernier élément du tableau        
+                                        postItArray.pop();
+                                        // j 'efface la div du DOM
+                                        this.post.remove();
+                                    }
+                                }, i);
+                            }
+                        }
+                    }, i);
+
+                }
+
+
             }
         }
         /*======================== FIN DU CONSTRUCTEUR ================================*/
@@ -393,11 +418,6 @@ function mode(mode) {
             sortArray();
             if (postItArray.length != 0) {
                 postItArray[postItArray.length - 1][0].style.border = "3px solid red";
-                textColor.value = postItArray[postItArray.length - 1][7];
-                postItColor.value = postItArray[postItArray.length - 1][8];
-                // let textSize = postItArray[postItArray.length - 1][9];
-                // let textFont = postItArray[postItArray.length - 1][10];
-                // console.log(textColor, backColor, textSize, textFont);
             }
             break;
         default:

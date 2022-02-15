@@ -1,10 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script&family=Hahmlet&family=Pacifico&family=Poppins&family=Roboto&family=Sacramento&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
 body,
 html {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    background-color: black;
+    background: rgb(120, 120, 126);
+    background: -moz-linear-gradient(0deg, rgba(120, 120, 126, 1) 0%, rgba(206, 206, 215, 1) 50%, rgba(0, 212, 255, 1) 100%);
+    background: -webkit-linear-gradient(0deg, rgba(120, 120, 126, 1) 0%, rgba(206, 206, 215, 1) 50%, rgba(0, 212, 255, 1) 100%);
+    background: linear-gradient(0deg, rgba(120, 120, 126, 1) 0%, rgba(206, 206, 215, 1) 50%, rgba(0, 212, 255, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#78787e", endColorstr="#00d4ff", GradientType=1);
     overflow: hidden;
     height: 100vh;
     display: flex;
@@ -19,21 +24,22 @@ header {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 h1 {
-    font-size: 40px;
-    color: white;
+    font-family: 'Lobster', cursive;
+    font-size: 65px;
+    color: rgb(0, 0, 0);
 }
 
 .buttonDiv {
     display: flex;
     align-items: center;
     right: 0px;
-    border: 2px solid white;
+    border: 2px solid rgb(0, 0, 0);
     margin-top: 10px;
-    padding: 5px 10px;
+    padding: 0px 10px;
     border-radius: 15px;
 }
 
@@ -78,6 +84,7 @@ header p {
     border-radius: 15px;
     text-transform: capitalize;
     font-size: 20px;
+    background-color: rgb(226, 226, 101);
 }
 
 
@@ -86,15 +93,30 @@ header p {
 .board {
     height: 80vh;
     width: 80vw;
-    background: -moz-linear-gradient(45deg, rgb(40, 56, 11) 0%, rgba(40, 50, 11, 1) 100%);
-    background: -webkit-linear-gradient(45deg, rgba(40, 56, 11, 1) 0%, rgba(40, 50, 11, 1) 100%);
-    background: linear-gradient(45deg, rgba(40, 56, 11, 1) 0%, rgb(40, 50, 9) 100%);
+    background-image: url('../Images/board2.png');
+    border: 15px solid rgb(70, 66, 66);
 }
+
+.plantDiv1 {
+    position: absolute;
+    bottom: -80px;
+    left: -210px;
+    z-index: 10000;
+}
+
+.plantDiv2 {
+    position: absolute;
+    bottom: -80px;
+    right: -150px;
+    z-index: 10000;
+}
+
+
+/*======================= POST IT ===========================*/
 
 .post-it {
     position: absolute;
     background-color: rgb(226, 226, 101);
-    border: 4px solid black;
     filter: drop-shadow(0 0 10px black);
     font-size: 20px;
     width: fit-content;
@@ -108,7 +130,7 @@ header p {
     border: none;
     resize: none;
     margin: 0;
-    padding: 10px;
+    padding: 25px 10px 10px 10px;
     font-size: 20px;
 }
 
@@ -143,6 +165,18 @@ textarea:focus {
     margin-bottom: -2px;
 }
 
+.pin {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    bottom: 93%;
+    left: 45%;
+    box-shadow: 0 0 10px black;
+    display: block;
+}
+
 
 /*====================== ASIDE BAR =======================*/
 
@@ -151,9 +185,11 @@ textarea:focus {
     height: 80vh;
     width: 12vw;
     left: 90vw;
-    background-color: bisque;
+    border-radius: 15px;
+    background: white;
     display: flex;
     flex-direction: column;
+    border: 4px solid black;
 }
 
 .deploy {
