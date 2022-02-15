@@ -1,12 +1,32 @@
+/*
+.----------------.  .----------------.  .----------------.  .----------------.   .----------------.  .----------------.   .----------------.  .----------------.  .----------------. 
+| .--------------. || .--------------. || .--------------. || .--------------. | | .--------------. || .--------------. | | .--------------. || .--------------. || .--------------. |
+| |   ______     | || |     ____     | || |    _______   | || |  _________   | | | |     _____    | || |  _________   | | | |      __      | || |   ______     | || |   ______     | |
+| |  |_   __ \   | || |   .'    `.   | || |   /  ___  |  | || | |  _   _  |  | | | |    |_   _|   | || | |  _   _  |  | | | |     /  \     | || |  |_   __ \   | || |  |_   __ \   | |
+| |    | |__) |  | || |  /  .--.  \  | || |  |  (__ \_|  | || | |_/ | | \_|  | | | |      | |     | || | |_/ | | \_|  | | | |    / /\ \    | || |    | |__) |  | || |    | |__) |  | |
+| |    |  ___/   | || |  | |    | |  | || |   '.___`-.   | || |     | |      | | | |      | |     | || |     | |      | | | |   / ____ \   | || |    |  ___/   | || |    |  ___/   | |
+| |   _| |_      | || |  \  `--'  /  | || |  |`\____) |  | || |    _| |_     | | | |     _| |_    | || |    _| |_     | | | | _/ /    \ \_ | || |   _| |_      | || |   _| |_      | |
+| |  |_____|     | || |   `.____.'   | || |  |_______.'  | || |   |_____|    | | | |    |_____|   | || |   |_____|    | | | ||____|  |____|| || |  |_____|     | || |  |_____|     | |
+| |              | || |              | || |              | || |              | | | |              | || |              | | | |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' | | '--------------' || '--------------' | | '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'  '----------------'   '----------------'  '----------------'   '----------------'  '----------------'  '----------------' 
+*/
+/*=====================================================================================*/
+/*=========================== DECLARATION DES VARIABLES ===============================*/
+/*=====================================================================================*/
+
 let postItArray = []; // Tableau de tous les post-it
 let dragMode = true; // Flag bouton deplacer post-it
 let resizeMode = false; // Flag bouton redimensionner post-it
 let eraseMode = false; // Flag bouton redimensionner post-it
 let editMode = false; // Flag bouton redimensionner post-it
 let asideBar = document.getElementById('asideBar');
-let max = 0;
-searchMax();
-let barDeployed = false;
+let max = 0; // Je mets le max à zéro si jamais c'est la premoiere fois que l'utilisateur utilise l'app
+searchMax(); // Je cherche le max si ce n'est pas la première utilisation de l'app
+let barDeployed = false; // Flag déploiement de la barre d'édition
+
+/*========================= BOUTONS ET EVENTS LISTENERS ================================*/
+
 // Input changer couleur texte postit et son event listener
 let textColor = document.getElementById('textColor');
 textColor.addEventListener("input", updateTextColor, false);
@@ -40,8 +60,13 @@ for (const elmt of buttonArray) {
     }
 }
 
-// Class Post-it
+/*=====================================================================================*/
+/*================================= CLASS POST IT =====================================*/
+/*=====================================================================================*/
 class Postit {
+
+    /*========================== ATTRIBUTS =================================*/
+
     width; // Largeur à l'écran
     height; // Hauteur à l'écran
     zIndex; // Son z-index
@@ -52,7 +77,7 @@ class Postit {
     post; //la div principale du post-it 
     text; // textarea
     erase; // la div pour supprimer (coin bas gauche du post-it)
-    edit; // la div pour editer ( bas du post-it)
+    edit; // la div pour editer ( bas du post-it)..
     cross; //la croix dans la div erase
     xOnStart; // sa position horizontal de départ pour calculer le déplacement
     yOnStart; // sa position verticale de départ pour calculer le déplacement
@@ -63,7 +88,8 @@ class Postit {
     backColor; // couleur du post-it
     textContent; // contenu texte du pos-it
 
-    // Constructeur avec paramètres par défaut
+    /*======================= CONSTRUCTEUR AVEC PARAMETRE PAR DEFAUT ====================================*/
+
     constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = 0, textColor = "", backColor = "", textSize = "", textFont = "", textContent = "") {
         this.posX = x;
         this.posY = y;
@@ -114,7 +140,7 @@ class Postit {
         board.appendChild(this.post);
         // Afin de pouvoir mettre à jour les z-index et trié les post-it
         // J'enregistre la div et le z-index
-        postItArray.push([this.post, this.zIndex, this.rotate]);
+        postItArray.push([this.post, this.posX, this.posY, this.width, this.height, this.zIndex, this.rotate, textColor, backColor, textSize, textFont, textContent]);
         // Application de la taille et du style de la police
         if (textFont == "") {
             textFont = "Roboto";
@@ -135,66 +161,71 @@ class Postit {
 
     }
 
+    /*============================= FONCTIONS DE LA CLASSE POST IT ======================================*/
+
     // Fonction déplacer ou redimensionner post-it
     // lorsque le click est enfoncé
     startDrag(e) {
-        // Si le mode déplacer est enclenché
-        if (dragMode) {
-            // Je passe la div en mode déplacement possible
-            this.isDraging = true;
-            // la div selectionné voit son z-index passé au max
-            this.post.style.zIndex = max + 1;
-            // Je enregistre la position de départ de la souris afin de calculer le déplacement
-            this.xOnStart = e.clientX + window.pageXOffset;
-            this.yOnStart = e.clientY + window.pageYOffset;
-            // Je passe tous les pos-it en transparent
-            postItArray.forEach((item) => {
-                item[0].style.opacity = "0.6";
-            })
-        }
-        // Si le mode redimensionner est enclenché
-        if (resizeMode || eraseMode) {
-            // la div selectionné voit son z-index passé au max
-            this.post.style.zIndex = max + 1;
-        }
-        if (editMode) {
-            this.post.style.zIndex = max + 1;
-            postItArray[postItArray.length - 1][0].style.border = "none";
-            // postItColor.value = (sliceRgb(postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor));
-        }
-    }
-    // fonction déplacer ou redimensionner post-it
-    // lorsque le click est relaché
-    stopDrag(e) {
-        searchMax();
-        // Si le mode déplacer est enclenché
-        if (dragMode) {
-            // Je passe la div en mode déplacement impossible
-            this.isDraging = false;
-            // la div selectionné voit son z-index passé au max
-            this.post.style.zIndex = max;
-            // Je met à jour sa position
-            this.posX = this.post.style.left;
-            this.posY = this.post.style.top;
-            // Je met à jour le z-index dans le tableau de post it
-            postItArray.forEach((item) => {
-                item[0].style.opacity = "1";
-            })
-        }
-        // si le mode redimensionner est enclecnché
-        if (resizeMode || editMode) {
-            // la div selectionné voit son z-index passé au max
-            this.post.style.zIndex = max;
-        }
-        // Je met à jour le z-index dans le tableau de post it
-        postItArray.forEach((item) => {
-            if (item[0] == this.post) {
-                item[1] = max;
+            // Si le mode déplacer est enclenché
+            if (dragMode) {
+                // Je passe la div en mode déplacement possible
+                this.isDraging = true;
+                // la div selectionné voit son z-index passé au max
+                this.post.style.zIndex = max + 1;
+                // Je enregistre la position de départ de la souris afin de calculer le déplacement
+                this.xOnStart = e.clientX + window.pageXOffset;
+                this.yOnStart = e.clientY + window.pageYOffset;
+                // Je passe tous les pos-it en transparent
+                postItArray.forEach((item) => {
+                    item[0].style.opacity = "0.6";
+                })
             }
-        })
-    }
-    // Fonction déplacer post-it
-    // lors du déplacement de la souris
+            // Si le mode redimensionner est enclenché
+            if (resizeMode || eraseMode) {
+                // la div selectionné voit son z-index passé au max
+                this.post.style.zIndex = max + 1;
+            }
+            if (editMode) {
+                this.post.style.zIndex = max + 1;
+                postItArray[postItArray.length - 1][0].style.border = "none";
+                // postItColor.value = (sliceRgb(postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor));
+            }
+        }
+        // fonction déplacer ou redimensionner post-it
+        // lorsque le click est relaché
+    stopDrag(e) {
+            searchMax();
+            // Si le mode déplacer est enclenché
+            if (dragMode) {
+                // Je passe la div en mode déplacement impossible
+                this.isDraging = false;
+                // la div selectionné voit son z-index passé au max
+                this.post.style.zIndex = max;
+                // Je met à jour sa position
+                this.posX = this.post.style.left;
+                this.posY = this.post.style.top;
+                postItArray.forEach((item) => {
+                    item[0].style.opacity = "1";
+                })
+            }
+            // si le mode redimensionner est enclecnché
+            if (resizeMode || editMode) {
+                // la div selectionné voit son z-index passé au max
+                this.post.style.zIndex = max;
+            }
+            // Je met à jour les propriétés dans le tableau de post it
+            postItArray.forEach((item) => {
+                if (item[0] == this.post) {
+                    item[1] = parseInt(this.post.style.left) + "px";
+                    item[2] = parseInt(this.post.style.top) + "px";
+                    item[3] = parseInt(this.text.style.width) + "px";
+                    item[4] = parseInt(this.text.style.height) + "px";
+                    item[5] = max;
+                }
+            })
+        }
+        // Fonction déplacer post-it
+        // lors du déplacement de la souris
     drag(e) {
         if (this.isDraging && dragMode) {
             this.post.style.left = parseInt(e.clientX) + parseInt(this.posX) - this.xOnStart + "px";
@@ -217,27 +248,56 @@ class Postit {
 
     // Fonction effacer un postit
     erasePostIt() {
-        if (eraseMode) {
-            searchMax();
+            if (eraseMode) {
+                searchMax();
 
-            // Je cherche le post it et Je redéfinis son z-index
-            postItArray.forEach((item) => {
-                if (item[0] == this.post) {
-                    item[1] = max + 1;
-                }
-            })
-            // Tri du tableau de post-it en fonction de leur z-index croissant
-            sortArray();
-            //  et j'efface le dernier élément du tableau        
-            postItArray.pop();
-            // j'efface la div du DOM
-            this.post.remove();
+                // Je cherche le post it et Je redéfinis son z-index
+                postItArray.forEach((item) => {
+                        if (item[0] == this.post) {
+                            item[5] = max + 1;
+                        }
+                    })
+                    // Tri du tableau de post-it en fonction de leur z-index croissant
+                sortArray();
+                //  et j'efface le dernier élément du tableau        
+                postItArray.pop();
+                // j'efface la div du DOM
+                this.post.remove();
+            }
         }
-    }
+        /*======================== FIN DU CONSTRUCTEUR ================================*/
 }
-/*======================== FIN DU CONSTRUCTEUR ================================*/
 
-// Fonction gérant les modes et l'affichage des boutons de mode
+/*=====================================================================================*/
+/*============================ FONCTIONS GLOBALES =====================================*/
+/*=====================================================================================*/
+
+/*======================== Fonction créer un post it relié au bouton ==================*/
+function addPostIt() {
+    new Postit();
+}
+
+/*================= Fonction qui recherche l'indice max et le redéfinit à +1 ==========*/
+function searchMax() {
+    postItArray.forEach((item) => {
+        if (item[5] >= max) {
+            max = item[5] + 1;
+        }
+    })
+}
+
+/*======== Fonction triant le tableau de post-it par leur z-index croissant ============*/
+function sortArray() {
+    postItArray.sort(function(a, b) {
+        if (a[5] === b[5]) {
+            return 0;
+        } else {
+            return (a[5] < b[5]) ? -1 : 1;
+        }
+    })
+}
+
+/*==============  Fonction gérant les modes et l'affichage des boutons de mode ==========*/
 function mode(mode) {
     // Variable qui va stocker le current bouton
     let targetButton;
@@ -323,43 +383,23 @@ function mode(mode) {
     targetButton.style.width = "180px";
     targetButton.style.backgroundColor = "rgb(18, 187, 18)";
 }
+/*=====================================================================================*/
+/*========================= FONCTIONS EDITION POST IT =================================*/
+/*=====================================================================================*/
 
-// Fonction créer un post it relié au bouton
-function addPostIt() {
-    new Postit();
-}
 
-// Fonction qui recherche l'indice max et le redéfinit à +1
-function searchMax() {
-    postItArray.forEach((item) => {
-        if (item[1] >= max) {
-            max = item[1] + 1;
-        }
-    })
-}
-
-// Foncction triant le tableau de post-it par leur z-index croissant
-function sortArray() {
-    postItArray.sort(function (a, b) {
-        if (a[1] === b[1]) {
-            return 0;
-        } else {
-            return (a[1] < b[1]) ? -1 : 1;
-        }
-    })
-}
-
-// Fonction changement couleur du texte post-it selectionné
+/*========== Fonction changement couleur du texte post-it selectionné ================*/
 function updateTextColor(e) {
     // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
     // Si le tableau n'est pas vide, je change la couleur du texte du post-it 
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].childNodes[0].style.color = e.target.value;
+        postItArray[postItArray.length - 1][7] = e.target.value;
     }
 }
 
-// Fonction changement couleur du post-it selectionné
+/*================ Fonction changement couleur du post-it selectionné ==================*/
 function updatePostItColor(e) {
     // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
@@ -367,43 +407,51 @@ function updatePostItColor(e) {
     if (postItArray.length != 0) {
         //textarea
         postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor = e.target.value;
+        postItArray[postItArray.length - 1][8] = e.target.value;
         //div
-        postItArray[postItArray.length - 1][0].style.backgroundColor = e.target.value;
+        postItArray[postItArray.length - 1][8] = e.target.value;
     }
 }
 
-// Fonction mis à jour de la police
+/*======================== Fonction mis à jour de la police ===========================*/
 function updateFont(family) {
     // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].childNodes[0].className = "text " + fontSelect.value;
+        postItArray[postItArray.length - 1][10] = fontSelect.value;
     }
 }
 
-// Fonction changeant la taille de la police du post-it sélectionné
+/*========== Fonction changeant la taille de la police du post-it sélectionné ============*/
 function updateFontSize(size) {
     // Tri tableau car le post-it seléctionné à forcément le z-index le plus grand    
     sortArray();
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].childNodes[0].id = fontSizeSelect.value;
+        postItArray[postItArray.length - 1][9] = fontSizeSelect.value;
     }
 }
 
-// Fonction rotation post-it
+/*============================= Fonction rotation post-it ===============================*/
 function rotate(direction) {
     sortArray();
     if (postItArray.length != 0) {
         if (direction == 'left') {
-            postItArray[postItArray.length - 1][2] -= 15;
-            postItArray[postItArray.length - 1][0].style.transform = "rotate(" + postItArray[postItArray.length - 1][2] + "deg)";
+            postItArray[postItArray.length - 1][6] -= 15;
+            postItArray[postItArray.length - 1][0].style.transform = "rotate(" + postItArray[postItArray.length - 1][6] + "deg)";
         }
         if (direction == 'right') {
-            postItArray[postItArray.length - 1][2] += 15;
-            postItArray[postItArray.length - 1][0].style.transform = "rotate(" + postItArray[postItArray.length - 1][2] + "deg)";
+            postItArray[postItArray.length - 1][6] += 15;
+            postItArray[postItArray.length - 1][0].style.transform = "rotate(" + postItArray[postItArray.length - 1][6] + "deg)";
         }
     }
 }
+
+/*=====================================================================================*/
+/*============================ GESTION LOCAL STORAGE ==================================*/
+/*=====================================================================================*/
+
 
 // Fonction sauvegarde dans le local storage
 function updateStorage() {
@@ -412,10 +460,8 @@ function updateStorage() {
     if (postItArray.length != 0) {
         for (const elmt of postItArray) {
             item++;
-            let fontFamily = elmt[0].childNodes[0].className;
-            fontFamily = fontFamily.substring(5, fontFamily.length);
-            localStorage.setItem(item, elmt[0].style.left + "*" + elmt[0].style.top + "*" + elmt[0].childNodes[0].style.height + "*" + elmt[0].childNodes[0].style.width + "*" + elmt[0].style.zIndex + "*" + elmt[2] + "*" + elmt[0].childNodes[0].style.color + "*" + elmt[0].childNodes[0].style.backgroundColor + "*" + elmt[0].childNodes[0].id + "*" + fontFamily + "*" + elmt[0].childNodes[0].value);
-            console.log(elmt[0].style.left + "*" + elmt[0].style.top + "*" + elmt[0].childNodes[0].style.height + "*" + elmt[0].childNodes[0].style.width + "*" + elmt[0].style.zIndex + "*" + elmt[2] + "*" + elmt[0].childNodes[0].style.color + "*" + elmt[0].childNodes[0].style.backgroundColor + "*" + elmt[0].childNodes[0].id + "*" + fontFamily + "*" + elmt[0].childNodes[0].value);
+            elmt[11] = elmt[0].childNodes[0].value;
+            localStorage.setItem(item, elmt[1] + "*" + elmt[2] + "*" + elmt[3] + "*" + elmt[4] + "*" + elmt[5] + "*" + elmt[6] + "*" + elmt[7] + "*" + elmt[8] + "*" + elmt[9] + "*" + elmt[10] + "*" + elmt[11]);
         }
     }
 }
@@ -425,45 +471,11 @@ function loadStorage() {
     for (let i = 1; i <= localStorage.length; i++) {
         let params = localStorage.getItem(i);
         params = params.split("*");
-        // console.log(params)
         new Postit(params[0], params[1], params[2], params[3], parseInt(params[4]), parseInt(params[5]), params[6], params[7], params[8], params[9], params[10]);
+        searchMax();
     }
 }
-
 
 setInterval(() => {
     updateStorage();
 }, 3000);
-
-
-
-
-// FONCTION CONVERSION RGB TO HEXADECIMAL
-// function sliceRgb(string) {
-//     string = string.substring(4, string.length - 2);
-//     string = string.split(", ");
-//     string = rgbToHex(string[0], string[1], string[2]);
-//     return string;
-// }
-
-// function rgbToHex(r, g, b) {
-//     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-// }
-
-// function componentToHex(c) {
-//     var hex = c.toString(16);
-//     return hex.length == 1 ? "0" + hex : hex;
-// }
-
-// function rgbToHex(r, g, b) {
-//     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-// }
-
-/**********************************************************************************/
-/****************** FAIRE UN FRIGO CE SERA VACHEMENT PLUS STYLE *******************/
-/**********************************************************************************/
-/******************* ROTATE POST IT ***********************************************/
-/**********************************************************************************/
-/**************************Copier Coller post it***********************************/
-/**********************************************************************************/
-/*********************** menu sur le coté pour l'édition **************************/
