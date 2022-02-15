@@ -184,6 +184,16 @@ class Postit {
                 this.post.style.zIndex = max + 1;
             }
             if (editMode) {
+                if (postItArray.length != 0) {
+                    postItArray.forEach((item) => {
+                        if (item[0] == this.post) {
+                            textColor.value = item[7];
+                            postItColor.value = item[8];
+                            console.log(fontSelect.selectedIndex)
+                        }
+                    })
+                }
+
                 this.post.style.zIndex = max + 1;
                 postItArray[postItArray.length - 1][0].style.border = "none";
             }
@@ -305,7 +315,6 @@ function mode(mode) {
     // Si le tableau de post it n'est pas vide, j'efface le focus du dernier post-it
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].style.border = "none";
-        postItArray[postItArray.length - 1][0].childNodes[0].style.border = "none";
     }
     switch (mode) {
         case 'drag':
@@ -361,6 +370,11 @@ function mode(mode) {
             sortArray();
             if (postItArray.length != 0) {
                 postItArray[postItArray.length - 1][0].style.border = "3px solid red";
+                textColor.value = postItArray[postItArray.length - 1][7];
+                postItColor.value = postItArray[postItArray.length - 1][8];
+                // let textSize = postItArray[postItArray.length - 1][9];
+                // let textFont = postItArray[postItArray.length - 1][10];
+                // console.log(textColor, backColor, textSize, textFont);
             }
             break;
         default:
