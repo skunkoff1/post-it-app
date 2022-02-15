@@ -48,6 +48,10 @@ let buttonResize = document.getElementById('modeButtonResize');
 let buttonErase = document.getElementById('modeButtonErase');
 let buttonEdit = document.getElementById('modeButtonEdit');
 
+// Récupération des plantes
+let plant1 = document.querySelector('.plantDiv1');
+let plant2 = document.querySelector('.plantDiv2');
+
 // Je met les boutons dans un tableau pour factoriser
 let buttonArray = [buttonDrag, buttonResize, buttonErase, buttonEdit];
 
@@ -171,6 +175,10 @@ class Postit {
     // Fonction déplacer ou redimensionner post-it
     // lorsque le click est enfoncé
     startDrag(e) {
+            plant1.style.zIndex = 0;
+            plant2.style.zIndex = 0;
+            plant1.style.opacity = 0.7;
+            plant2.style.opacity = 0.7;
             // Si le mode déplacer est enclenché
             if (dragMode) {
                 // Je passe la div en mode déplacement possible
@@ -225,6 +233,10 @@ class Postit {
         // fonction déplacer ou redimensionner post-it
         // lorsque le click est relaché
     stopDrag(e) {
+            plant1.style.zIndex = 20000;
+            plant2.style.zIndex = 20000;
+            plant1.style.opacity = 1;
+            plant2.style.opacity = 1;
             searchMax();
             // Si le mode déplacer est enclenché
             if (dragMode) {

@@ -455,6 +455,12 @@ footer p {
             left: 90vw;
         }
     }
+    .plantDiv1 {
+        left: -300px;
+    }
+    .plantDiv2 {
+        right: -250px;
+    }
 }
 
 @media (max-width:1300px) {
@@ -479,12 +485,6 @@ footer p {
         100% {
             left: 90vw;
         }
-    }
-    .plantDiv1 {
-        left: -250px;
-    }
-    .plantDiv2 {
-        right: -250px;
     }
 }
 
