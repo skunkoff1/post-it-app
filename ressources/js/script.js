@@ -431,9 +431,9 @@ function loadStorage() {
 }
 
 
-// setInterval(() => {
-//     updateStorage();
-// }, 1000);
+setInterval(() => {
+    updateStorage();
+}, 3000);
 
 
 
