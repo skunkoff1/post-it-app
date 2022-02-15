@@ -305,6 +305,7 @@ function mode(mode) {
     // Si le tableau de post it n'est pas vide, j'efface le focus du dernier post-it
     if (postItArray.length != 0) {
         postItArray[postItArray.length - 1][0].style.border = "none";
+        postItArray[postItArray.length - 1][0].childNodes[0].style.border = "none";
     }
     switch (mode) {
         case 'drag':
@@ -442,6 +443,17 @@ function rotate(direction) {
             postItArray[postItArray.length - 1][6] += 15;
             postItArray[postItArray.length - 1][0].style.transform = "rotate(" + postItArray[postItArray.length - 1][6] + "deg)";
         }
+    }
+}
+
+function duplicate() {
+    sortArray();
+    if (postItArray.length != 0) {
+        let index = postItArray.length - 1;
+        let posX = parseInt(postItArray[index][1]) + 20 + "px";
+        let posY = parseInt(postItArray[index][2]) + 20 + "px";
+        postItArray[postItArray.length - 1][0].style.border = "none";
+        new Postit(posX, posY, postItArray[index][3], postItArray[index][4], postItArray[index][5], postItArray[index][6], postItArray[index][7], postItArray[index][8], postItArray[index][9], postItArray[index][10], postItArray[index][11]);
     }
 }
 

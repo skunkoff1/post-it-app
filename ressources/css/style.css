@@ -87,12 +87,8 @@ header p {
     height: 80vh;
     width: 80vw;
     background: -moz-linear-gradient(45deg, rgb(40, 56, 11) 0%, rgba(40, 50, 11, 1) 100%);
-    /* FF3.6-15 */
     background: -webkit-linear-gradient(45deg, rgba(40, 56, 11, 1) 0%, rgba(40, 50, 11, 1) 100%);
-    /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(45deg, rgba(40, 56, 11, 1) 0%, rgb(40, 50, 9) 100%);
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#38230b', endColorstr='#0033301b', GradientType=1);
 }
 
 .post-it {
@@ -151,11 +147,10 @@ textarea:focus {
 /*====================== ASIDE BAR =======================*/
 
 #asideBar {
-    position: absolute;
+    position: relative;
     height: 80vh;
-    top: 12vh;
     width: 12vw;
-    right: -12vw;
+    left: 90vw;
     background-color: bisque;
     display: flex;
     flex-direction: column;
@@ -170,10 +165,10 @@ textarea:focus {
 
 @keyframes deploy {
     0% {
-        right: -12vw;
+        left: 90vw;
     }
     100% {
-        right: 0vw;
+        left: 78vw;
     }
 }
 
@@ -186,10 +181,10 @@ textarea:focus {
 
 @keyframes hide {
     0% {
-        right: 0vw;
+        left: 78vw;
     }
     100% {
-        right: -12vw;
+        left: 90vw;
     }
 }
 
@@ -205,7 +200,8 @@ label {
 }
 
 .colors,
-.font {
+.font,
+.duplicateDiv {
     margin-top: 20px;
 }
 
@@ -213,71 +209,50 @@ label {
     margin-top: 20px;
     height: 70px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.duplicateDiv {
+    display: flex;
+    justify-content: center;
 }
 
 
-/*==================== ROTATE BUTTON ==========================*/
+/*==================== ROTATE ET DUPLICATE BUTTON ==========================*/
+
+.rotateButtonDiv {
+    display: flex;
+}
 
 .rotateButton {
-    height: 50px;
-    width: 50px;
+    min-height: 50px;
+    min-width: 50px;
     border-radius: 15px;
     background-color: rgb(214, 214, 214);
     border: 1px solid gray;
     margin: 10px;
 }
 
-.rotateButton:hover {
+.rotateButton:hover,
+.duplicateButton:hover {
     filter: brightness(0.8);
     cursor: pointer;
 }
 
-.rightArrow {
-    position: relative;
-    left: 25px;
-    top: 20px;
-    width: 0;
-    height: 0;
-    border-top: 9px solid transparent;
-    border-right: 9px solid red;
-    transform: rotate(-10deg);
-}
-
-.rightArrow:after {
-    content: "";
-    position: absolute;
-    border: 0 solid transparent;
-    border-top: 5px solid red;
-    border-radius: 30px 0 0 0;
-    top: -12px;
-    left: -9px;
-    width: 12px;
-    height: 12px;
-    transform: rotate(45deg);
-}
-
 .leftArrow {
-    position: relative;
-    left: 20px;
-    top: 20px;
-    width: 0;
-    height: 0;
-    border-top: 9px solid transparent;
-    border-left: 9px solid red;
-    transform: rotate(10deg);
+    transform: scale(-1, 1);
 }
 
-.leftArrow:after {
-    content: "";
-    position: absolute;
-    border: 0 solid transparent;
-    border-top: 5px solid red;
-    border-radius: 0 30px 0 0;
-    top: -12px;
-    right: -9px;
-    width: 12px;
-    height: 12px;
-    transform: rotate(-45deg);
+.duplicateButton {
+    height: 50px;
+    width: 100px;
+    background-color: rgb(214, 214, 214);
+    border: 1px solid gray;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
