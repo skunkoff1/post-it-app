@@ -18,6 +18,10 @@ html {
     justify-content: space-between;
 }
 
+.message {
+    display: none;
+}
+
 header {
     height: 10vh;
     width: 80vw;
@@ -190,6 +194,7 @@ textarea:focus {
     display: flex;
     flex-direction: column;
     border: 4px solid black;
+    z-index: 20000;
 }
 
 .deploy {
@@ -268,8 +273,8 @@ label {
 }
 
 .rotateButton {
-    min-height: 50px;
-    min-width: 50px;
+    height: 60px;
+    width: 60px;
     border-radius: 15px;
     background-color: rgb(214, 214, 214);
     border: 1px solid gray;
@@ -383,4 +388,206 @@ footer {
 
 footer p {
     margin-right: 50px;
+}
+
+@media (max-width:1600px) {
+    h1 {
+        font-size: 45px;
+    }
+    #modeButtonDrag,
+    #modeButtonResize,
+    #modeButtonErase,
+    #modeButtonEdit,
+    #addPostIt {
+        height: 50px;
+        width: 150px;
+        font-size: 18px;
+    }
+    #asideBar {
+        width: 13vw;
+    }
+    @keyframes deploy {
+        0% {
+            left: 90vw;
+        }
+        100% {
+            left: 77vw;
+        }
+    }
+    @keyframes hide {
+        0% {
+            left: 77vw;
+        }
+        100% {
+            left: 90vw;
+        }
+    }
+    .rotateButton {
+        height: 50px;
+        width: 50px;
+        border-radius: 15px;
+        background-color: rgb(214, 214, 214);
+        border: 1px solid gray;
+        margin: 10px;
+    }
+}
+
+@media (max-width:1400px) {
+    header p {
+        display: none;
+    }
+    #asideBar {
+        width: 14vw;
+    }
+    @keyframes deploy {
+        0% {
+            left: 90vw;
+        }
+        100% {
+            left: 76vw;
+        }
+    }
+    @keyframes hide {
+        0% {
+            left: 76vw;
+        }
+        100% {
+            left: 90vw;
+        }
+    }
+}
+
+@media (max-width:1300px) {
+    header {
+        width: 95vw;
+    }
+    #asideBar {
+        width: 15vw;
+    }
+    @keyframes deploy {
+        0% {
+            left: 90vw;
+        }
+        100% {
+            left: 75vw;
+        }
+    }
+    @keyframes hide {
+        0% {
+            left: 75vw;
+        }
+        100% {
+            left: 90vw;
+        }
+    }
+    .plantDiv1 {
+        left: -250px;
+    }
+}
+
+@media (max-width:1100px) {
+    header {
+        width: 95vw;
+    }
+    #modeButtonDrag,
+    #modeButtonResize,
+    #modeButtonErase,
+    #modeButtonEdit,
+    #addPostIt {
+        height: 50px;
+        width: 130px;
+        font-size: 16px;
+    }
+    #asideBar {
+        width: 17vw;
+    }
+    @keyframes deploy {
+        0% {
+            left: 90vw;
+        }
+        100% {
+            left: 73vw;
+        }
+    }
+    @keyframes hide {
+        0% {
+            left: 73vw;
+        }
+        100% {
+            left: 90vw;
+        }
+    }
+}
+
+@media (max-width:1000px) {
+    header {
+        width: 98vw;
+    }
+    h1 {
+        font-size: 35px;
+    }
+    .buttonDiv {
+        padding: 0 5px;
+        border: none;
+    }
+    #modeButtonDrag,
+    #modeButtonResize,
+    #modeButtonErase,
+    #modeButtonEdit,
+    #addPostIt {
+        height: 50px;
+        width: 100px;
+        font-size: 16px;
+        margin: 2px;
+        padding: 4px;
+    }
+    #asideBar {
+        width: 20vw;
+    }
+    @keyframes deploy {
+        0% {
+            left: 90vw;
+        }
+        100% {
+            left: 70vw;
+        }
+    }
+    @keyframes hide {
+        0% {
+            left: 70vw;
+        }
+        100% {
+            left: 90vw;
+        }
+    }
+    .plantDiv1 {
+        left: -350px;
+    }
+}
+
+@media only screen and (max-device-width:600px) {
+    .message {
+        display: flex;
+        justify-content: center;
+    }
+    h1 {
+        margin-top: 300px;
+        font-size: 200px;
+    }
+    #addPostIt {
+        display: none;
+    }
+    .buttonDiv {
+        display: none;
+    }
+    .board {
+        display: none;
+    }
+    .message p {
+        font-size: 150px;
+        margin: 50px;
+    }
+    footer p {
+        font-size: 50px;
+    }
 }
