@@ -108,18 +108,18 @@ class Postit {
         this.erase = document.createElement('div');
         this.cross = document.createElement('div');
         let board = document.querySelector('.board');
-        // Attribution des valeurs 
+        // Attribution des classe 
         this.post.className = "post-it";
-        this.text.style.width = this.width;
-        this.text.style.height = this.height;
+        this.text.className = "text";
+        this.erase.className = "erase";
+        this.cross.className = "cross";
+        // Attribution des propriétés
         this.post.style.left = x;
         this.post.style.top = y;
+        this.text.style.width = this.width;
+        this.text.style.height = this.height;
         this.post.style.zIndex = this.zIndex;
-        this.erase.className = "erase";
-        this.erase.style.width = "30px";
-        this.erase.style.display = "none";
-        this.text.className = "text";
-        // Attribution du contenu, des propriétés 
+        // Attribution du contenu
         this.text.value = textContent;
         if (backColor == "") {
             backColor = "#e2e265";
@@ -132,14 +132,13 @@ class Postit {
         this.text.style.color = textColor;
         this.post.style.transform = "rotate(" + rotate + "deg)";
         this.text.setAttribute("spellcheck", "false");
-        this.cross.className = "cross";
         // Création de la structure HTML du post-it et envoi dans le DOM
         this.post.appendChild(this.text);
         this.post.appendChild(this.erase);
         this.erase.appendChild(this.cross);
         board.appendChild(this.post);
         // Afin de pouvoir mettre à jour les z-index et trié les post-it
-        // J'enregistre la div et le z-index
+        // J'enregistre les propriétés de l'objet dans un tableau div et le z-index
         postItArray.push([this.post, this.posX, this.posY, this.width, this.height, this.zIndex, this.rotate, textColor, backColor, textSize, textFont, textContent]);
         // Application de la taille et du style de la police
         if (textFont == "") {
@@ -158,7 +157,6 @@ class Postit {
         this.post.addEventListener('touchend', this.stopDrag.bind(this));
         this.post.addEventListener('touchmove', this.drag.bind(this));
         this.erase.addEventListener('click', this.erasePostIt.bind(this));
-
     }
 
     /*============================= FONCTIONS DE LA CLASSE POST IT ======================================*/
@@ -188,7 +186,6 @@ class Postit {
             if (editMode) {
                 this.post.style.zIndex = max + 1;
                 postItArray[postItArray.length - 1][0].style.border = "none";
-                // postItColor.value = (sliceRgb(postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor));
             }
         }
         // fonction déplacer ou redimensionner post-it
@@ -250,7 +247,6 @@ class Postit {
     erasePostIt() {
             if (eraseMode) {
                 searchMax();
-
                 // Je cherche le post it et Je redéfinis son z-index
                 postItArray.forEach((item) => {
                         if (item[0] == this.post) {
@@ -383,6 +379,7 @@ function mode(mode) {
     targetButton.style.width = "180px";
     targetButton.style.backgroundColor = "rgb(18, 187, 18)";
 }
+
 /*=====================================================================================*/
 /*========================= FONCTIONS EDITION POST IT =================================*/
 /*=====================================================================================*/
