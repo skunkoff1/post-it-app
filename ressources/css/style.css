@@ -205,6 +205,12 @@ label {
     margin-top: 20px;
 }
 
+.fint,
+.fontSize {
+    display: flex;
+    flex-direction: column;
+}
+
 .rotateDiv {
     margin-top: 20px;
     height: 70px;

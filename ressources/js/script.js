@@ -91,6 +91,7 @@ class Postit {
     /*======================= CONSTRUCTEUR AVEC PARAMETRE PAR DEFAUT ====================================*/
 
     constructor(x = "500px", y = "400px", width = "150px", height = "150px", zIndex = max, rotate = 0, textColor = "", backColor = "", textSize = "", textFont = "", textContent = "") {
+        searchMax();
         this.posX = x;
         this.posY = y;
         this.width = width;
@@ -98,9 +99,11 @@ class Postit {
         this.isDraging = false;
         this.isResizing = false;
         this.rotate = rotate;
-        this.zIndex = zIndex;
-        if (max <= zIndex) {
-            max = zIndex + 1;
+        this.zIndex = max;
+        if (postItArray.length != 0) {
+            if (max <= zIndex) {
+                max = zIndex + 1;
+            }
         }
         // Création des composants du post-it et récupération du container
         this.post = document.createElement("div");
@@ -189,11 +192,28 @@ class Postit {
                         if (item[0] == this.post) {
                             textColor.value = item[7];
                             postItColor.value = item[8];
-                            console.log(fontSelect.selectedIndex)
+                            if (item[10] != "") {
+                                for (const elmt of fontSelect.childNodes) {
+                                    if (elmt.value == item[10]) {
+                                        elmt.setAttribute('selected', true);
+                                    } else if (elmt.innerHTML != null) {
+                                        elmt.removeAttribute('selected');
+                                    }
+                                }
+                            }
+                            if (item[9] != "") {
+                                for (const elmt of fontSizeSelect.childNodes) {
+                                    if (elmt.value == item[9]) {
+                                        elmt.setAttribute('selected', true);
+                                    } else if (elmt.innerHTML != null) {
+                                        elmt.removeAttribute('selected');
+                                    }
+                                }
+                            }
+
                         }
                     })
                 }
-
                 this.post.style.zIndex = max + 1;
                 postItArray[postItArray.length - 1][0].style.border = "none";
             }
@@ -285,6 +305,9 @@ function addPostIt() {
 
 /*================= Fonction qui recherche l'indice max et le redéfinit à +1 ==========*/
 function searchMax() {
+    if (postItArray.length == 0) {
+        max = 1;
+    }
     postItArray.forEach((item) => {
         if (item[5] >= max) {
             max = item[5] + 1;
