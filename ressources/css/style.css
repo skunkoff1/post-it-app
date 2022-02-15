@@ -565,6 +565,33 @@ footer p {
     }
 }
 
+@media (max-width:800px) {
+    .message {
+        display: flex;
+        justify-content: center;
+    }
+    h1 {
+        margin-top: 100px;
+        font-size: 80px;
+    }
+    #addPostIt {
+        display: none;
+    }
+    .buttonDiv {
+        display: none;
+    }
+    .board {
+        display: none;
+    }
+    .message p {
+        font-size: 50px;
+        margin: 50px;
+    }
+    footer p {
+        font-size: 50px;
+    }
+}
+
 @media only screen and (max-device-width:600px) {
     .message {
         display: flex;
