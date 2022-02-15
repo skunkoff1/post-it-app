@@ -379,6 +379,10 @@ function mode(mode) {
     switch (mode) {
         case 'drag':
             dragMode = true;
+            plant1.style.zIndex = 20000;
+            plant2.style.zIndex = 20000;
+            plant1.style.opacity = 1;
+            plant2.style.opacity = 1;
             // Animation sidebar -> je la cache
             if (barDeployed) {
                 asideBar.className = "hide";
@@ -391,6 +395,10 @@ function mode(mode) {
             })
             break;
         case 'resize':
+            plant1.style.zIndex = 0;
+            plant2.style.zIndex = 0;
+            plant1.style.opacity = 0.7;
+            plant2.style.opacity = 0.7;
             // Animation sidebar -> je la cache
             if (barDeployed) {
                 asideBar.className = "hide";
@@ -404,6 +412,10 @@ function mode(mode) {
             })
             break;
         case 'erase':
+            plant1.style.zIndex = 0;
+            plant2.style.zIndex = 0;
+            plant1.style.opacity = 0.7;
+            plant2.style.opacity = 0.7;
             // Animation sidebar -> je la cache
             if (barDeployed) {
                 asideBar.className = "hide";
@@ -417,6 +429,10 @@ function mode(mode) {
             })
             break;
         case 'edit':
+            plant1.style.zIndex = 20000;
+            plant2.style.zIndex = 20000;
+            plant1.style.opacity = 1;
+            plant2.style.opacity = 1;
             // Animation sidebar -> je la déploie
             asideBar.className = "deploy";
             barDeployed = true;
