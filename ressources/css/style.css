@@ -598,7 +598,7 @@ footer p {
     }
 }
 
-@media only screen and (max-device-width:600px) {
+@media only screen and (max-device-width:900px) {
     .message {
         display: flex;
         justify-content: center;
