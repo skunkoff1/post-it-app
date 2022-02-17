@@ -136,6 +136,7 @@ class Postit {
         }
         this.text.style.backgroundColor = backColor;
         this.post.style.backgroundColor = backColor;
+        this.erase.style.backgroundColor = backColor;
         if (textColor == "") {
             textColor = "black";
         }
@@ -490,8 +491,8 @@ function updatePostItColor(e) {
     if (postItArray.length != 0) {
         //textarea
         postItArray[postItArray.length - 1][0].childNodes[0].style.backgroundColor = e.target.value;
-        postItArray[postItArray.length - 1][8] = e.target.value;
-        //div
+        postItArray[postItArray.length - 1][0].childNodes[1].style.backgroundColor = e.target.value;
+        postItArray[postItArray.length - 1][0].style.backgroundColor = e.target.value;
         postItArray[postItArray.length - 1][8] = e.target.value;
     }
 }
